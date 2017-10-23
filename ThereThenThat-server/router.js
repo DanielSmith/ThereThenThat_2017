@@ -1,0 +1,98 @@
+/*
+**  router.js
+*/
+
+const tttUtils = require("./tttUtils.js");
+const uuid = require("node-uuid");
+const express = require('express');
+const app = express.Router();
+const path = require('path');
+module.exports = app;
+
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use(express.static('uploads'));
+
+const { Container, Link } = require('./models/ttt');
+
+app.get('/sockjs-node*', function(req, res, next) {
+  res.status(200);
+});
+
+
+// this set of checks is for gathering up our variables
+// we give a lot of flexibility by allowing for a variable
+// number of arguments
+app.get('/:location', function(req, res, next) {
+  res.locals.params = tttUtils.separateParams(req.params);
+  next();
+});
+
+
+app.get('/:location/:time', function(req, res, next) {
+  res.locals.params = tttUtils.separateParams(req.params);
+  next();
+});
+
+
+app.get('/:location/:time/:tags', function(req, res, next) {
+  res.locals.params = tttUtils.separateParams(req.params);
+  next();
+});
+
+
+app.get('/:location/:time/:tags/:people', function(req, res, next) {
+  res.locals.params = tttUtils.separateParams(req.params);
+  next();
+});
+
+
+app.get('/:location/:time/:tags/:people/:options', function(req, res, next) {
+  res.locals.params = tttUtils.separateParams(req.params);
+  next();
+});
+
+
+// list all collections
+app.get('/', function(req, res) {
+
+  Container.find({})
+    .exec(function(err, existingAddress) {
+
+      if (err) { return next(err); }
+
+      if (existingAddress) {
+        return res.status(200).json(existingAddress);
+      } else {
+        res.send('nope');
+      }
+  });
+});
+
+
+
+// going for a specific collection
+app.get('*', function(req, res) {
+  if (res.locals.params === undefined) {
+    res.send('bad url');
+  } else {
+    res.locals.validations = tttUtils.doValidations(res.locals.params);
+  }
+
+  res.locals.address = tttUtils.makeAddress(res.locals.validations);
+
+  // fix this to sort by date
+  Container.findOne({ address: res.locals.address })
+    .populate({ path: 'links', options: { sort: { 'size': -1 }}})
+    .exec(function(err, existingAddress) {
+    if (err) { return next(err); }
+
+    if (existingAddress) {
+      return res.status(200).json(existingAddress);
+    } else {
+      res.send('nope');
+    }
+  });
+});
+

@@ -1,0 +1,35 @@
+{
+  "name": "ThereThenThat-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serverorig": "node-inspector  &  nodemon --inspect ./app.js",
+    "server": "nodemon  --inspect ./app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/maps": "^0.4.3",
+    "axios": "^0.16.2",
+    "body-parser": "^1.15.0",
+    "date-fns": "^1.28.5",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "moment": "^2.14.1",
+    "mongoose": "^4.10.8",
+    "multer": "^1.3.0",
+    "node-metainspector-with-headers": "^1.2.1",
+    "node-uuid": "^1.4.7",
+    "request": "^2.75.0",
+    "request-promise": "^4.1.1",
+    "request-promise-json": "^1.0.4",
+    "socket.io": "^2.0.3",
+    "validator": "^8.1.0",
+    "wildcard-subdomains": "^1.0.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.7.0"
+  }
+}

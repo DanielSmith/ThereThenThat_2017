@@ -1,0 +1,116 @@
+<template>
+  <v-app light
+    @dragover.native="dragOver"
+    @drop.native="doDrop"
+    @dragstart.native="dragOver"
+    @dragend.native="dragEnd"  
+  >
+
+    <TTTHeader></TTTHeader>
+    <main>
+      <SearchPickers></SearchPickers>
+
+      <v-container fluid>
+
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-card flat pb-5 v-for="item in mainList" :key="item._id">
+              <h4><a :href="item.address">{{ item.title }}</a></h4>
+              <p>{{ item.description }}</p>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </main>
+  </v-app>
+</template>
+
+<script>
+import Vue from 'vue'
+import TTTHeader from '@/components/TTTHeader'
+import SearchPickers from '@/components/SearchPickers'
+import { mapMutations, mapActions, mapGetters, mapState } from 'vuex';
+
+export default {
+  name: 'AllCollections',
+
+  components: {
+    TTTHeader,
+    SearchPickers
+  },
+  
+  computed: {
+  ...mapGetters({
+    searchFromStore: 'getMySearchResult'
+    })
+  },
+
+  watch: {
+    searchFromStore() {
+      this.mainList = this.searchFromStore;
+      console.dir(this.searchFromStore);
+    }
+  },
+
+  data() {
+    return {
+      // this really should be in some sort of global config
+      SERVER_HOST: 'localhost',
+      SERVER_PORT: '3100',
+
+      mainList: []
+    }
+  },
+
+  mounted: function() {
+    this.getTTTList();
+  },
+
+  methods: {
+    onPaste() {
+      // this would be for pasting items to a shelf..
+      // so that they could be referenced from within
+      // an individual collection
+    },
+
+    getTTTList() {
+      // call server for JSON data
+      fetch(`http://${this.SERVER_HOST}:${this.SERVER_PORT}`)
+        .then(response => response.json())
+        .then(response => {
+          this.mainList = response;
+          console.dir(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+
+
+    // specific drag / drop / paste handlers for
+    // Collection list - these would put items on
+    // a shalf for use with a specific collection
+    dragEnd: function(args) {
+      args.preventDefault();
+    },
+
+    dragOver: function(args) {
+      args.preventDefault();
+    },
+
+    doDrop(args) {
+      args.preventDefault();
+      const link = args.dataTransfer.getData("Text");
+
+      // same idea for this as paste:
+      // this would be for putting links on a shelf..
+      // so that they could be referenced from within
+      // an individual collection
+    }
+  }
+}
+</script>
+
+<style lang="stylus">
+@import '../stylus/main'
+</style>

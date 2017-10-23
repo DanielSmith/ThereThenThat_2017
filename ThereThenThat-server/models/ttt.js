@@ -1,0 +1,128 @@
+/*
+**  ttt.js - models for ThereThenThat
+*/
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+mongoose.Promise = global.Promise;
+
+// define model
+const containerSchema = new Schema({
+  // address: { type: String, unique: true, lowercase: true },
+  address: { type: String, lowercase: true },
+  id: String,
+
+  version: String,
+  address: String,
+  timestamp: String,
+  title: String,
+  description: String,
+  timeSaved: { type: Date, default: Date.now },
+
+  // this gets populated from the Link collection
+  links: [
+    {type: Schema.Types.ObjectId, ref: 'Link' }
+  ],
+
+  // this was added so that it could be indexed for $near searches
+  // it might make sense to break it out into its own model
+  // that way, it could be used by links as well...
+  gps: {
+    type: {
+      type: "String",
+      required: true,
+      enum: ['Point', 'LineString', 'Polygon'],
+      default: 'Point'
+    },
+    coordinates: [Number]
+  },
+
+  location: {
+    component: String,
+    full: String,
+    placeName: String,
+    latitude: String,
+    longitude: String,
+    altitude: String
+  },
+
+  time: {
+    component: String,
+    milliseconds: String,
+    seconds: String,
+    minutes: String,
+    hours: String,
+    day: String,
+    month: String,
+    year: String,
+    dayName: String,
+    dayOfWeek: String,
+    dayOfYear: String,
+    weekOfYear: String,
+    quarter: String,
+    timestamp: String
+  },
+
+  tags: {
+    component: String,
+    allTags: [ String ],
+    tagsByService: {
+    }
+  },
+
+  people: {
+    component: String,
+    allPeople: [ String ],
+    peopleByService: {
+      // as in, by accounts on Twitter, Facebook, etc
+    }
+  },
+
+  options: [ String ]
+});
+
+
+// this is going to migrate to a more flexible itemSchema
+const linkSchema = new Schema({
+  url: String,
+  title: String,
+  description: String,
+
+  entryType: { type: String, default: "url" },
+  timeSaved: { type: Date, default: Date.now },
+  
+  // support for 1 external data item
+  data: { type: String, default: "unused" },
+  originalname: String,
+  fileName: String,
+  mimeType: String,
+  size: Number,
+  encoding: String,
+  path: String
+});
+
+const geoCodingShema = new Schema({
+  updated: { type: Date, default: Date.now },
+  geoData: Object 
+});
+
+
+containerSchema.index({ 'gps': '2dsphere' });
+
+// create model classes
+const Container = mongoose.model('Container', containerSchema);
+const Link = mongoose.model('Link', linkSchema);
+const GeoCode = mongoose.model('GeoCode', geoCodingShema);
+
+
+// export model
+module.exports = {
+  containerSchema,
+  linkSchema,
+  Container,
+  Link,
+  GeoCode
+};
+
+
