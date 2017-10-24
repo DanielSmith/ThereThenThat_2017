@@ -8,7 +8,7 @@
 
     <TTTHeader></TTTHeader>
     <main>
-      <SearchPickers></SearchPickers>
+      <SearchAndCreate></SearchAndCreate>
 
       <v-container fluid>
 
@@ -28,7 +28,7 @@
 <script>
 import Vue from 'vue'
 import TTTHeader from '@/components/TTTHeader'
-import SearchPickers from '@/components/SearchPickers'
+import SearchAndCreate from '@/components/SearchAndCreate'
 import { mapMutations, mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
@@ -36,7 +36,7 @@ export default {
 
   components: {
     TTTHeader,
-    SearchPickers
+    SearchAndCreate
   },
   
   computed: {

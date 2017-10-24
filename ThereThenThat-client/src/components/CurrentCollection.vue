@@ -9,7 +9,7 @@
     <TTTHeader></TTTHeader>
 
     <main>
-      <SearchPickers></SearchPickers>
+      <SearchAndCreate></SearchAndCreate>
 
       <!-- <v-layout row v-for="curImage in this.imageList" key=curImage._id>
         <v-flex xs12 sm6 offset-sm3>
@@ -63,7 +63,7 @@
 
 <script>
 import TTTHeader from '@/components/TTTHeader';
-import SearchPickers from '@/components/SearchPickers';
+import SearchAndCreate from '@/components/SearchAndCreate';
 import axios from 'axios';
 
 import audioComponent from './Audio';
@@ -77,7 +77,7 @@ export default {
 
   components: {
     TTTHeader,
-    SearchPickers,
+    SearchAndCreate,
     audioComponent,
     videoComponent,
     imageComponent,
