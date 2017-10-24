@@ -77,9 +77,9 @@ let mimeUtils = {
     },
   },
 
-  getItemType(theFilenane) {
+  getItemType(theFilenane = "none.undefined") {
     let ext =  theFilenane.split('.').pop();
-    let retval =  this.extTable[ext] || "unknown";
+    let retval =  this.extTable[ext] || "textComponent";
 
     return retval;
   },

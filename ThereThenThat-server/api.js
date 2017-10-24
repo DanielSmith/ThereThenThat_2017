@@ -179,6 +179,7 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
   const url = "none";
   const title = req.body.title;
   const description = req.body.description;
+  const extension = req.body.extension;
   
 
   const pathToUse = req.file.path.replace('public', '') || 'none';
@@ -191,6 +192,7 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
     description: description,
     entryType: "image",
     
+    extension: extension,
     originalname: req.file.originalname,
     fileName: req.file.filename,
     mimeType: req.file.mimetype,

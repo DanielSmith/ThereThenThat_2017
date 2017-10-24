@@ -20,14 +20,27 @@
       </v-layout>
  -->
       <v-container fluid>
+
+        <v-layout row v-for="curItem in this.pastedList" key="curKey++">
+          <v-flex xs12>
+            <v-card flat pb-5>
+              <img :src="curItem"> 
+            </v-card>
+            <v-spacer></v-spacer>
+
+          </v-flex>
+        </v-layout>
+
+
         <v-layout row wrap>
           <v-flex xs12 sm6 offset-sm3>
-            <v-card v-for="curCollection in this.curCollectionList.links" :key="curCollection._id">
-                <h4>{{ curCollection.originalname }} - <br>  <a :href=curCollection.url target="fromTTT"> {{ curCollection.url }}</a> </h4>
-                <p>{{ curCollection.description }} {{ curCollection._id }} </p>
+            <v-card v-for="curLink in this.curCollectionList.renderLinks" :key="curLink.data._id">
+                <h4>{{ curLink.data.originalname }} - <br>  <a :href=curLink.data.url target="fromTTT"> {{ curLink.data.url }}</a> </h4>
+                <p>{{ curLink.data.description }} {{ curLink._id }} </p>
+                <p>{{ curLink.componentType }} </p>
 
-                <div v-if="checkCuritem(curCollection)">
-                  <img :src="getCurImage(curCollection)">
+                <div v-if="checkCuritem(curLink.data)">
+                  <img :src="getCurImage(curLink.data)">
                 </div>
             </v-card>
           </v-flex>
@@ -45,21 +58,31 @@ import axios from 'axios';
 import audioComponent from './Audio';
 import videoComponent from './Video';
 import imageComponent from './Image';
+import mimeUtils from '../../../common/mimeUtils';
 
 export default {
   name: 'CurrentCollection',
 
   components: {
     TTTHeader,
-    SearchPickers
+    SearchPickers,
+    audioComponent,
+    videoComponent,
+    imageComponent
   },
   
   data() {
     return {
 
+      currentView: 'videoComponent',
+
       // put this in some global config
       SERVER_HOST: 'localhost',
       SERVER_PORT: '3100',
+
+      itemList: [],
+      pastedList: [],
+      addedList: [],
 
       curCollectionList: [],
       imageList: []
@@ -80,12 +103,47 @@ export default {
       fetch(path)
         .then(response => response.json())
         .then(response => {
-          console.dir(response);
+
           this.curCollectionList = response;
+          this.curCollectionList.renderLinks = [];
+          this.curCollectionList.links.map(cur => {
+            let newObj = {};
+
+            newObj.data = cur;
+            console.log('cur is... ');
+            newObj.componentType = mimeUtils.getItemType(cur.fileName)
+            console.log(newObj);
+            this.curCollectionList.renderLinks.push(newObj);
+          });
+
+  console.log('==============');
+          console.log(JSON.stringify(this.curCollectionList));
+          console.log('==============');
         })        
         .catch(err => {
           console.log(err);
         });
+    },
+
+    getNewElementForType(theType) {
+
+      switch (theType) {
+        case "image":
+          return new Image();
+          break;
+
+        case "audio":
+          return new Audio();
+          break;
+
+        case "video":
+          return document.createElement('video');
+          break;
+
+        default:
+          return ''; // what to use for this...?
+          break;
+      }
     },
 
     onPaste(event) {
@@ -183,29 +241,41 @@ export default {
 
     doDroppedFiles: function(event) {
       let theFiles = Array.from(event.dataTransfer.files);
-      let that = this;
       let myImageList = this.imageList;
 
       theFiles.map(curFile => {
+        // get file type
+        let curFileData = mimeUtils.getData(curFile);
+
+        // am sure this should be reworked.. hacked it from being
+        // image-only to image, audio, or video
         let reader = new FileReader();
         reader.onload = (inner) => {
-          let droppedImage = new Image();
-          droppedImage.onload = function() {
-            myImageList.unshift(droppedImage.src);
+
+          let droppedItem = this.getNewElementForType(curFileData.type);
+          let newObj = {};
+          newObj.componentType = mimeUtils.getItemType(curFileData.ext);
+          newObj.data = droppedItem;
+
+          droppedItem.onload = () => {
+            // this.showDropHelp = 0;
           }
-          droppedImage.src = reader.result;
+
+          droppedItem.src = reader.result;
+          this.addedList.push(newObj);
         }
 
         reader.readAsDataURL(curFile);
-        this.doUpload(curFile);
+        this.doUpload(curFile, curFileData.ext);
       })
     },
 
-    doUpload(imageFile) {
+    doUpload(uploadFile, extension = "png") {
       const uploadData = new FormData();
-      uploadData.append('thefile', imageFile);
-      uploadData.append('title', 'image upload');
-      uploadData.append('description', 'image description');
+      uploadData.append('thefile', uploadFile);
+      uploadData.append('title', 'media upload');
+      uploadData.append('extension', extension);
+      uploadData.append('description', 'media description');
       uploadData.append('container', this.curCollectionList._id);
 
       const config = {
@@ -222,6 +292,12 @@ export default {
     },
 
     doDrop: function(event) {
+      event.preventDefault();
+      this.doDroppedFiles(event);
+    },
+
+
+    OLDdoDrop: function(event) {
       event.preventDefault();
 
       if (event.dataTransfer.getData('Text') !== '') {
@@ -268,7 +344,7 @@ export default {
         // let length = pastedImage.length;
       }
       pastedImage.src = source;
-      this.imageList.unshift(pastedImage.src);
+      this.pastedList.unshift(pastedImage.src);
     },
 
 
@@ -288,11 +364,7 @@ export default {
     },
 
     getCurImage(item) {
-      console.log(JSON.stringify(item));
-
-
       return `http://${this.SERVER_HOST}:${this.SERVER_PORT}/${item.path}`;
-      // return `http://${this.SERVER_HOST}:${this.SERVER_PORT}/uploads/2017-10-23/1508782049241-3dbb0356-5991-4b6b-b5bf-4a16793e8e11.jpg`;
     }
   }
 }

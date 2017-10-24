@@ -88,6 +88,7 @@ const linkSchema = new Schema({
   url: String,
   title: String,
   description: String,
+  extension: String,
 
   entryType: { type: String, default: "url" },
   timeSaved: { type: Date, default: Date.now },
