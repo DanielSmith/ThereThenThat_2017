@@ -31,17 +31,28 @@
           </v-flex>
         </v-layout>
 
+        <v-layout row v-for="curItem in this.addedList" key="curKey++">
+          <v-flex xs12>
+            <v-card flat pb-5>
+
+              <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="curItem.componentType">
+              </component>
+              <v-spacer></v-spacer>
+
+            </v-card>
+          </v-flex>
+        </v-layout>
+
 
         <v-layout row wrap>
           <v-flex xs12 sm6 offset-sm3>
-            <v-card v-for="curLink in this.curCollectionList.renderLinks" :key="curLink.data._id">
-                <h4>{{ curLink.data.originalname }} - <br>  <a :href=curLink.data.url target="fromTTT"> {{ curLink.data.url }}</a> </h4>
-                <p>{{ curLink.data.description }} {{ curLink._id }} </p>
-                <p>{{ curLink.componentType }} </p>
+            <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
+                <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
+                <p>{{ curItem.data.description }} {{ curItem.data._id }} </p>
 
-                <div v-if="checkCuritem(curLink.data)">
-                  <img :src="getCurImage(curLink.data)">
-                </div>
+              <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
+              </component>
+
             </v-card>
           </v-flex>
         </v-layout>
@@ -58,6 +69,7 @@ import axios from 'axios';
 import audioComponent from './Audio';
 import videoComponent from './Video';
 import imageComponent from './Image';
+import textComponent from './Text';
 import mimeUtils from '../../../common/mimeUtils';
 
 export default {
@@ -68,7 +80,8 @@ export default {
     SearchPickers,
     audioComponent,
     videoComponent,
-    imageComponent
+    imageComponent,
+    textComponent
   },
   
   data() {
@@ -363,7 +376,7 @@ export default {
       return item.entryType === "image";
     },
 
-    getCurImage(item) {
+    getCurMedia(item) {
       return `http://${this.SERVER_HOST}:${this.SERVER_PORT}/${item.path}`;
     }
   }

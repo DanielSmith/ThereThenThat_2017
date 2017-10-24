@@ -1,8 +1,6 @@
 <template>
   <div>
-    hello images...
-    <img :src="itemPath">
-    goodbye images...
+  text component...
   </div>
 </template>
 

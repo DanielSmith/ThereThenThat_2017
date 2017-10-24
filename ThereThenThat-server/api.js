@@ -48,6 +48,8 @@ api.use(bodyParser.json());
 module.exports = router;
 
 // create a collection
+// TBD: allow for just one main component (location, time, or tags)
+// dont allow _/_/_
 router.post("/create", function (req, res, next) {
 
   res.locals.params = tttUtils.separateParams(req.body);

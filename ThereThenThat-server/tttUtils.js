@@ -168,7 +168,7 @@ function doValidations(params) {
 // valid: 0, .45, -.9, -448.3
 // invalid: any negative number greater than the radius of the earth in meters
 
-function validateLocation(location) {
+function validateLocation(location = '_') {
 
   // console.log(`validateLocation  with ${location}`);
 
@@ -176,6 +176,8 @@ function validateLocation(location) {
   // if we grab what is handy here...
   let locationParams = { 
     component: "_",
+    latitude: "0",
+    longitude: "0",
     error: []
   };
 
@@ -219,7 +221,7 @@ function validateLocation(location) {
   return locationParams;
 }
 
-function validateTime(time) {
+function validateTime(time = '_') {
 
   let timeParams = { 
     component: "_",
