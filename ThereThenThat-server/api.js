@@ -65,8 +65,9 @@ router.post("/create", function (req, res, next) {
     if (err) { return next(err); }
 
     if (existingAddress) {
-      return res.send('already exists');
-      // return res.status(200).json(existingAddress);
+      // torubles with this..
+      res.writeHead(200, {"Content-Type": "application/json"});
+      res.end(JSON.stringify(existingAddress));
     }
   });
 
@@ -108,7 +109,9 @@ router.post("/create", function (req, res, next) {
           if (err) { console.log('ERROR: ',  err); }
         });
 
+        // errors on this...
         res.send('saved map data');
+        res.end();
     })
     .catch(function(err) {
         console.log(err);
