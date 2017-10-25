@@ -45,7 +45,6 @@ export const store = new Vuex.Store({
     // click from map.. need to update input field
     mapUpdate(state, payload) {
       state.location.latestLatLng = payload;
-      console.dir(JSON.stringify(state));
     },
 
     // from autocomplete, need to update map

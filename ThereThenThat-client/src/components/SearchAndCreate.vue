@@ -131,6 +131,7 @@ export default {
    ...mapGetters({
       addressFromMap: 'getMyAddress',
       addressUpdated: 'getMyAddressUpdate',
+      latLngUpdated: 'getMyLatLng',
       dateTimeFromPicker: 'getMyDateTime'
     })
   },
@@ -142,8 +143,26 @@ export default {
       this.theLocation = this.addressFromMap;
     },
 
+    latLngFromMap() {
+      alert('ghety');
+      this.lat = this.latLngUpdated.lat;
+      this.lng = this.lngLngUpdated.lat;
+
+  
+    },
+    
     addressUpdated() {
       this.addressFromMap;
+    },
+
+    latLngUpdated() {
+      this.lat = this.latLngUpdated.lat;
+      this.lng = this.latLngUpdated.lng;
+
+    alert(` hello... 
+      ${this.lat},
+      ${this.lng},
+      `);
     },
 
     dateTimeFromPicker() {
@@ -193,9 +212,6 @@ export default {
       drawer: true,
       fixed: false,
       items: [
-        { icon: 'bubble_chart', title: 'Inspire' },
-        { icon: 'camera_enhance', title: 'Yep' },
-        { icon: 'bubble_chart', title: 'Inspire' }
       ],
       miniVariant: false,
       right: true,
@@ -291,13 +307,29 @@ export default {
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace();
 
+
+        console.dir(place);
+
         if (place === null) {
+          alert('place null');
           return;
         }
 
-        if (place.name && place.name.length > 0) {
+        // if (place.geometry && place.geometry.location) {
+        //   this.lat = place.geometry.location.lat();
+        //   this.lng = place.geometry.location.lng();
+        // }
+
+        if (place.geometry.location.lat && place.geometry.location.lng) {
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
+
+          alert(`
+          it is
+          ${this.lat}
+          ${this.lng}
+          
+          `)
         }
 
         this.theLocation = place.formatted_address;
@@ -362,7 +394,17 @@ export default {
 
     createClick() {
 
-      // starting as a clone from serarch, but this will evolve
+        alert(`
+${this.theLocation}
+${this.lat}
+${this.lng}
+${this.theDateTime}
+${this.theTags}
+        `)
+
+
+// needs location and time..
+
       axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/create`, {
         location: this.theLocation,
         lat: this.lat,
@@ -370,7 +412,7 @@ export default {
         time: this.theDateTime,
         tags: this.theTags,
         people: "daniel",
-        title: "some new collection",
+        title: "does this work... new collection",
         description: "test",
         address: "test address"
       })
