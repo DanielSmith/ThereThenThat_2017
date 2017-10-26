@@ -56,7 +56,7 @@ router.post("/create", function (req, res, next) {
     if (err) { return next(err); }
 
     if (existingAddress) {
-      // torubles with this..
+      // troubles with this..
       res.writeHead(200, {"Content-Type": "application/json"});
       res.end(JSON.stringify(existingAddress));
     }

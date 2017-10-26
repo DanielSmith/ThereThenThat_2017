@@ -394,17 +394,7 @@ export default {
 
     createClick() {
 
-        alert(`
-${this.theLocation}
-${this.lat}
-${this.lng}
-${this.theDateTime}
-${this.theTags}
-        `)
-
-
-// needs location and time..
-
+      // needs location and time..
       axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/create`, {
         location: this.theLocation,
         lat: this.lat,
