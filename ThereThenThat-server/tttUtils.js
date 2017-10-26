@@ -103,6 +103,8 @@ function separateParams(theParams) {
   // in part because it does not end up getting urlencoded
   let params = {
     location: "_",
+    lat: "_",
+    lng: "_",
     time: "_",
     tags: "_",
     people: "_",

@@ -12,15 +12,6 @@ const router = express.Router();
 
 // file upload handling
 const multer  = require('multer');
-let OLDstorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, tttUtils.createUploadFilename('.png-hellko'));
-  }
-})
-
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -71,9 +62,15 @@ router.post("/create", function (req, res, next) {
     }
   });
 
+
+
   // we're good to go...
-  const longitude = parseFloat(res.locals.validations.location.longitude);
-  const latitude = parseFloat(res.locals.validations.location.latitude);
+  // const longitude = parseFloat(res.locals.validations.location.longitude);
+  // const latitude = parseFloat(res.locals.validations.location.latitude);
+  const longitude = parseFloat(res.locals.validations.lng);
+  const latitude = parseFloat(res.locals.validations.lat);
+
+  console.log(res.locals);
 
   const ttt = new Container({
     version: "1",
@@ -87,6 +84,8 @@ router.post("/create", function (req, res, next) {
     description: res.locals.validations.description,
     address: address
   });
+
+  console.log(ttt);
 
   ttt.save(function(err, newContainer) {
     if (err) { return next(err); }

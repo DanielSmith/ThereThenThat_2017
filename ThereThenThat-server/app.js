@@ -11,7 +11,8 @@ const router = require('./router');
 const apiRouter = require("./api");
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:therethenthat');
+mongoose.connect('mongodb://localhost/mytttapp');
+// mongoose.connect('mongodb://localhost:therethenthat');
 
 // this results in many lines of GET /sockjs-node/info
 app.use(require('morgan')("combined"));

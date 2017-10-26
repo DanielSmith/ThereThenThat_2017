@@ -409,6 +409,7 @@ ${this.theTags}
         location: this.theLocation,
         lat: this.lat,
         lng: this.lng,
+        dls: 'daniel',
         time: this.theDateTime,
         tags: this.theTags,
         people: "daniel",
