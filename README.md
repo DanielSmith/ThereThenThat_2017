@@ -36,8 +36,50 @@ ThereThenThat
 │   └── public
 └── common
 ```
-You may want to open up two shells - one for server, one for client.
+
+### A few notes on dependencies:
+
+There will be a future document about the architecture of ThereThenThat.  In broad strokes, the server side is a headless CMS, and the dev client runs in a completely seperate Node/Webpack/Vue.js environment. There is also a dependency on having a working MongoDB instance.
+
+* Client - Vue.js, Vuetify, Vuex, Google Maps API
+* Server - Node.js, Express, Multer, Mongoose, MongoDB
+
+Open up two shells - one for server, one for client.
+
+### Server Side
+``` bash
+cd ThereThenThat-server
+
+# install dependencies
+npm install
+
+# Node process will run at port 8081
+npm run server
+```
+
+You should be running a recent version of MongoDB.  Here is what I am using at the moment:
+
+```bash
+Brooklyn:projects dls$ mongo --version
+MongoDB shell version v3.4.4
+git version: 888390515874a9debd1b6c5d36559ca86b44babd
+OpenSSL version: OpenSSL 1.0.2l  25 May 2017
+allocator: system
+modules: none
+build environment:
+    distarch: x86_64
+    target_arch: x86_64
+  ```
 
 
+### Client Side
 
+``` bash
+cd ThereThenThat-client
+
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
 
