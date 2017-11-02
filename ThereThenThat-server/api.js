@@ -63,14 +63,23 @@ router.post("/create", function (req, res, next) {
   });
 
 
+  console.log('------------------');
+  console.log(res.locals.validations);
+  console.log('------------------');
 
   // we're good to go...
-  // const longitude = parseFloat(res.locals.validations.location.longitude);
-  // const latitude = parseFloat(res.locals.validations.location.latitude);
-  const longitude = parseFloat(res.locals.validations.lng);
-  const latitude = parseFloat(res.locals.validations.lat);
+  // const longitude = parseFloat(res.locals.validations.lng);
+  // const latitude = parseFloat(res.locals.validations.lat);
+  
+  // const longitude = '29.0';
+  // const latitude =  '29.0';
+  
+  const longitude = parseFloat(res.locals.validations.location.longitude);
+  const latitude = parseFloat(res.locals.validations.location.latitude);
 
-  console.log(res.locals);
+  console.log(`long: ${longitude}`)
+  console.log(`lat: ${latitude}`)
+
 
   const ttt = new Container({
     version: "1",

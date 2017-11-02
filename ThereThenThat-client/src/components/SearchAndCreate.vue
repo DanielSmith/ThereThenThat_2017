@@ -144,11 +144,8 @@ export default {
     },
 
     latLngFromMap() {
-      alert('ghety');
       this.lat = this.latLngUpdated.lat;
-      this.lng = this.lngLngUpdated.lat;
-
-  
+      this.lng = this.lngLngUpdated.lat;  
     },
     
     addressUpdated() {
@@ -159,10 +156,10 @@ export default {
       this.lat = this.latLngUpdated.lat;
       this.lng = this.latLngUpdated.lng;
 
-    alert(` hello... 
-      ${this.lat},
-      ${this.lng},
-      `);
+    // alert(` hello... 
+    //   ${this.lat},
+    //   ${this.lng},
+    //   `);
     },
 
     dateTimeFromPicker() {
@@ -311,7 +308,6 @@ export default {
         console.dir(place);
 
         if (place === null) {
-          alert('place null');
           return;
         }
 
@@ -324,12 +320,12 @@ export default {
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
 
-          alert(`
-          it is
-          ${this.lat}
-          ${this.lng}
+        //   alert(`
+        //   it is
+        //   ${this.lat}
+        //   ${this.lng}
           
-          `)
+        //   `)
         }
 
         this.theLocation = place.formatted_address;
@@ -393,19 +389,20 @@ export default {
     },
 
     createClick() {
+      this.lat = this.lat || 0;
+      this.lng = this.lng || 0;
+      this.theLocation = `${this.lat},${this.lng}`;
 
       // needs location and time..
       axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/create`, {
         location: this.theLocation,
         lat: this.lat,
         lng: this.lng,
-        dls: 'daniel',
         time: this.theDateTime,
         tags: this.theTags,
         people: "daniel",
-        title: "does this work... new collection",
+        title: `from   ${this.theLocation}`,
         description: "test",
-        address: "test address"
       })
       .then(response => {
         console.log(response);

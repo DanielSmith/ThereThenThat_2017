@@ -172,6 +172,9 @@ function doValidations(params) {
 
 function validateLocation(location = '_') {
 
+  console.log(`in valid...    ${location}`);
+
+
   // console.log(`validateLocation  with ${location}`);
 
   // we return an object - easier to do fine grained searches later
