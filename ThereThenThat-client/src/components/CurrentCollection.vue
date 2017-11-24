@@ -11,6 +11,8 @@
     <main>
       <SearchAndCreate></SearchAndCreate>
 
+
+
       <!-- <v-layout row v-for="curImage in this.imageList" key=curImage._id>
         <v-flex xs12 sm6 offset-sm3>
           <v-card>
@@ -24,7 +26,10 @@
         <v-layout row v-for="curItem in this.pastedList" key="curKey++">
           <v-flex xs12>
             <v-card flat pb-5>
-              <img :src="curItem"> 
+
+              <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
+              </component>
+
             </v-card>
             <v-spacer></v-spacer>
 

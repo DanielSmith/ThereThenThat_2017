@@ -4,6 +4,7 @@
 
 const path = require('path')
 const express = require('express');
+const tttconfig = require("./config.json");
 const tttUtils = require("./tttUtils.js");
 const util = require('util');
 const MetaInspector = require('node-metainspector-with-headers');

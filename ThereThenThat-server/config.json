@@ -1,0 +1,13 @@
+{
+  "USING_DB": 1,
+  "USING_EMAIL": 1,
+  "SENDGRID_API_KEY": "SG.key",
+  "SS_ADMIN_EMAIL": "javajoint@gmail.com",
+  "SS_ADMIN_FROM": "javajoint@gmail.com",
+  "MONGO_DB_HOST": "mongo host",
+  "MONGO_DB_CONNECT": "mongodb://localhost/mytttapp",
+  "SERVER_ADDRESS": "http://localhost:3100",
+  "SERVER_PORT": "3100",
+  "CLIENT_ADDRESS": "http://localhost:8080"
+}
+

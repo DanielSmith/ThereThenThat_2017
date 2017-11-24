@@ -9,10 +9,12 @@ let io = require('socket.io')(server);
 
 const router = require('./router');
 const apiRouter = require("./api");
+const tttconfig = require("./config.json");
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/mytttapp');
-// mongoose.connect('mongodb://localhost:therethenthat');
+mongoose.connect(tttconfig.MONGO_DB_CONNECT, {
+  useMongoClient: true,
+});  
 
 // this results in many lines of GET /sockjs-node/info
 app.use(require('morgan')("combined"));
@@ -28,7 +30,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.locals.counter = 1;
+// app.locals.counter = 1;
 
 app.all('/*', function (req, res, next) {
   res.header('Access-Control-Allow-Credentials', "true");
@@ -42,7 +44,7 @@ app.all('/*', function (req, res, next) {
 app.use("/", router);
 app.use("/api", apiRouter);
 
-app.listen(3100, function () {
+app.listen(tttconfig.SERVER_PORT, function () {
   io.on('connection', function(client) {  
     console.log('Client connected...');
     

@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import TTTHeader from '@/components/TTTHeader';
 import AllCollections from '@/components/AllCollections';
 import CurrentCollection from '@/components/CurrentCollection';
+import TestCollection from '@/components/TestCollection';
 import About from '@/components/About';
 
 Vue.use(Router);
@@ -51,7 +52,7 @@ export default new Router({
   {
     path: '/:location',
     name: 'SingleL',
-    component: CurrentCollection
+    component: TestCollection
   }
   ],
 });
