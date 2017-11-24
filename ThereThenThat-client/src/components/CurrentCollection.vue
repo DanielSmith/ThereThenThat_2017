@@ -10,31 +10,15 @@
 
     <main>
       <SearchAndCreate></SearchAndCreate>
-
-
-
-      <!-- <v-layout row v-for="curImage in this.imageList" key=curImage._id>
-        <v-flex xs12 sm6 offset-sm3>
-          <v-card>
-            <img :src="curImage" />
-          </v-card>
-        </v-flex>
-      </v-layout>
- -->
       <v-container fluid>
-
         <v-layout row v-for="curItem in this.pastedList" key="curKey++">
           <v-flex xs8 class="mediaBox">
             <v-card flat pb-5>
-
               <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
               </component>
-
             </v-card>
             <v-spacer></v-spacer>
-
           </v-flex>
-
         </v-layout>
 
         <v-layout row v-for="curItem in this.addedList" key="curKey++">
@@ -49,32 +33,24 @@
           </v-flex>
         </v-layout>
 
-
         <v-layout row wrap>
           <v-flex xs12>
             <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
+              <v-container fluid grid-list-lg>
+                <v-layout row wrap>
+                  <v-flex xs7 class="mediaBox">
+                    <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
+                    <p>{{ curItem.data.description }} {{ curItem.data._id }} </p>
 
-           <v-container fluid grid-list-lg>
-              <v-layout row wrap >
+                    <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
+                    </component>
 
-          <v-flex xs7 class="mediaBox" >
-                <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
-                <p>{{ curItem.data.description }} {{ curItem.data._id }} </p>
-
-              <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
-              </component>
-
-          </v-flex>
-          <v-flex xs4>
-
-            <p> tags and info will go here...</p>
- 
-          </v-flex>
-
-              </v-layout>
-           </v-container>
-
-
+                  </v-flex>
+                  <v-flex xs4>
+                    <p> tags and info will go here...</p>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </v-card>
           </v-flex>
         </v-layout>
