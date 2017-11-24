@@ -61,7 +61,15 @@
     <v-spacer></v-spacer>
 
     <v-layout row wrap pb-4 v-if="showSearchCreate">
-      <v-flex xs4 offset-xs8 text-xs-center>
+      <v-flex xs2 text-xs-center>
+        <v-btn fab primary dark
+          @click="closeSearchCreate"
+        >
+          <v-icon>close</v-icon>
+        </v-btn>
+
+      </v-flex>
+      <v-flex xs6 offset-xs4 text-xs-center>
         <v-btn large primary dark
           @click="searchClick"
         >Search</v-btn>
@@ -69,7 +77,6 @@
           @click="createClick"
         >Create</v-btn>
       </v-flex>
-
     </v-layout>
 
     <v-layout row wrap custom_tab_height v-if="isFocused">
@@ -280,6 +287,11 @@ export default {
     inputPaste() {
       // might want to handle this ....
       // alert('location paste');
+    },
+
+    closeSearchCreate() {
+      this.showSearchCreate = false;
+      this.isFocused = false;
     },
 
     doClearLocation() {
