@@ -187,6 +187,59 @@ router.post("/addlink", function (req, res, next) {
 });
 
 
+
+
+router.post('/gettags', function(req, res, next) {
+  
+  let returnObj = {};
+  if (req.body.tagquery === undefined ||
+    req.body.tagquery === '') {
+    res.send('none');
+  }
+
+  const tAry = req.body.tagquery.split(/ +/);
+  console.log(tAry);
+
+  Link.find({ tags: { $all: tAry }})
+  .exec(function(err, existingMedia) {   
+    if (err) { return next(err); }
+
+    returnObj.status = 'ok';
+    returnObj.mediaInfo = existingMedia;
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.end(JSON.stringify(returnObj));
+  })
+})
+
+router.post('/synctags', function(req, res, next) {
+  
+
+  console.log(req.body);
+  // needs much better error handling
+  if (req.body.tagquery === undefined ||
+    req.body.tagquery === '') {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.end(JSON.stringify( { status: 'error'}));
+    return;
+  }
+
+  const id = req.body.id;
+  const tags = req.body.tagquery;
+  const updateTags = {
+    tags: tags
+  };
+
+
+  Link.findByIdAndUpdate(id, { $set: updateTags }, function(err, result) {
+    if(err){
+      console.log(err);
+    }
+    console.log("RESULT: " + result);
+    res.send('Done')
+  });
+})
+
+
 // this and addlink share the DB save code.. should refactor
 router.post('/fileupload', uploadFile, function(req, res, next) {
   const theContainer = req.body.container;

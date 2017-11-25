@@ -100,7 +100,11 @@ const linkSchema = new Schema({
   mimeType: String,
   size: Number,
   encoding: String,
-  path: String
+  path: String,
+
+  tags: [{
+    type: String
+  }]
 });
 
 const geoCodingShema = new Schema({

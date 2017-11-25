@@ -45,6 +45,8 @@
                     <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
                     </component>
 
+
+                    <v-btn @click="syncTags(curItem.data._id)">sync</v-btn>
                   </v-flex>
                   <v-flex xs4>
                     <p> tags and info will go here...</p>
@@ -376,7 +378,31 @@ export default {
 
     getCurMedia(item) {
       return `http://${this.SERVER_HOST}:${this.SERVER_PORT}/${item.path}`;
+    },
+
+    syncTags(id) {
+
+      alert('sync  ' + id);
+      // const tags = this.allTags[id];
+      id = '5a18cf00ff23740b5ec52185';
+      const tags = ['one', 'two', 'three'];
+
+      console.log(tags);
+      let apiPath = `${this.$config.SERVER}${this.$config.SERVER_PORT}/api/synctags`,              
+        dbArgs = { id: id, tagquery: tags };
+
+      console.log( apiPath );
+      const config = { headers: { 'Content-Type': 'application/json' } };
+
+      axios.post(apiPath, dbArgs, config)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
+
   }
 }
 </script>

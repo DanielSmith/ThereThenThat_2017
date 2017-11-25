@@ -4,7 +4,8 @@ const vueConfig = require('vue-config')
 const configs = {
   ENV: 'Local Dev',
   CLIENT: 'http://localhost:8080',
-  SERVER: 'http://localhost:3100'
+  SERVER: 'http://localhost',
+  SERVER_PORT: ':3100'  
 }
 
 Vue.use(vueConfig, configs)

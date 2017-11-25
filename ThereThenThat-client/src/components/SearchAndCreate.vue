@@ -79,6 +79,7 @@
       </v-flex>
     </v-layout>
 
+<transition name="expand">
     <v-layout row wrap custom_tab_height v-if="isFocused">
 
       <v-tabs dark fixed centered v-model="active">
@@ -111,6 +112,7 @@
         </v-tabs-items>
       </v-tabs>
     </v-layout>
+</transition>
   </div>
 </template>
 
@@ -459,4 +461,27 @@ export default {
 .custom_tab_height {
   height: 550px;
 }
+
+
+/* transition stuff */
+.expand-move {
+  transition: all 1600ms ease-in-out 650ms;
+}
+
+
+.expand-enter-active,
+.expand-leave-active {
+  transition: opacity 1100ms;
+}
+
+.expand-enter,
+.expand-leave-to {
+  opacity: 0
+}
+
+.expand-leave,
+.expand-enter-to {
+  opacity: 1
+}
+
 </style>
