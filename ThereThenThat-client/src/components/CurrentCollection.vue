@@ -39,8 +39,6 @@
               <v-container fluid grid-list-lg>
                 <v-layout row wrap>
                   <v-flex xs7 class="mediaBox">
-                    <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
-                    <p>{{ curItem.data.description }} {{ curItem.data._id }} </p>
 
                     <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
                     </component>
@@ -49,8 +47,32 @@
                     <v-btn @click="syncTags(curItem.data._id)">sync</v-btn>
                   </v-flex>
                   <v-flex xs4>
-                    <p> tags and info will go here...</p>
+                    <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
+
+                    <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
                   </v-flex>
+
+                  <v-form v-if="showEditTags[curItem.data._id]" ref="form">
+                    <v-layout pl-5 row>
+                      <v-flex xs4>
+                        <v-text-field
+                        label="Enter new tags"
+                        v-model="allTagEdits[curItem.data._id]"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs4>
+                        <v-btn @click="submitTags(curItem.data._id)">Add Tags</v-btn>
+                      </v-flex>
+                    </v-layout>
+                  </v-form>
+                  <v-btn  v-for="curTag in allTags[curItem.data._id]" key="curKey++"
+                    @click="chooseTag(curItem.data._id, curTag)"
+                    >
+                    <strong> {{ curTag }} </strong> 
+                    <span class="showEditTag" v-if="showEditTags[curItem.data._id]"> X  </span>
+                  </v-btn>
+
+
                 </v-layout>
               </v-container>
             </v-card>
@@ -97,6 +119,10 @@ export default {
       pastedList: [],
       addedList: [],
 
+      allTags: {},
+      allTagEdits: {},
+      showEditTags: {},
+
       curCollectionList: [],
       imageList: []
     }
@@ -126,6 +152,14 @@ export default {
             console.log('cur is... ');
             newObj.componentType = mimeUtils.getItemType(cur.fileName)
             console.log(newObj);
+            newObj.tags = cur.tags || [];
+            newObj.id = cur._id;
+
+
+            this.$set(this.showEditTags, newObj.id, false);
+            this.$set(this.allTagEdits, newObj.id, '');
+            this.$set(this.allTags, newObj.id, newObj.tags);
+
             this.curCollectionList.renderLinks.push(newObj);
           });
 
@@ -379,6 +413,46 @@ export default {
     getCurMedia(item) {
       return `http://${this.SERVER_HOST}:${this.SERVER_PORT}/${item.path}`;
     },
+
+
+    toggleEdit(id) {
+      this.showEditTags[id] = !this.showEditTags[id];
+    },
+
+    submitTags(id) {
+      
+      // rewrite this.. the empty and null cases can cause problems
+      console.log(this.allTags);
+      // am also being careful not to send an empty tag
+      let tAry = (this.allTagEdits[id]).split(/ +/);
+      tAry = tAry.filter(val => val !== '');
+
+      if (tAry.length === 0) { tAry = ['']; }
+      if (this.allTags[id] === null) { this.allTags[id] = []; }
+
+      console.log(` for ${id}......asfter............`);
+      const newTagsAr = [...this.allTags[id], ...tAry].sort();
+      let newTags = [...new Set(newTagsAr)];
+      newTags = newTags.filter(val => val !== '');
+      this.$set(this.allTags, id, newTags);
+
+      this.showEditTags[id] = false;
+      this.allTagEdits[id] = '';
+      this.syncTags(id);
+    },
+
+    chooseTag(id, tag) {
+      // are we editing, or doing a search?
+      if (this.showEditTags[id]) {
+        const newTags = this.allTags[id].filter(val => val !== tag);
+        this.$set(this.allTags, id, newTags);
+        this.syncTags(id);
+      } else {
+        tag = tag.trim();
+        // this.getMediaWithDB(tag, this.BY_KEYWORD);
+      }
+    },
+
 
     syncTags(id) {
 
