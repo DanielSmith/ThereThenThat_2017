@@ -343,44 +343,6 @@ export default {
       this.doDroppedFiles(event);
     },
 
-
-    OLDdoDrop: function(event) {
-      event.preventDefault();
-
-      if (event.dataTransfer.getData('Text') !== '') {
-        this.doDroppedLink(event);
-      } else {
-        this.doDroppedFiles(event);
-      }
-
-      let link = event.dataTransfer.getData('Text');
-
-
-      // should break this out for different media types
-      // and do it on a per file basis
-      if (event.dataTransfer.types) {
-        // do a map in here...
-      }
-
-      let curImage = new Image();
-      let canvas = document.createElement('canvas');
-      let ctx = canvas.getContext('2d');
-
-      curImage.onload = () => {
-        canvas.width = curImage.width;
-        canvas.height = curImage.height;
-        ctx.drawImage(curImage, 0, 0);
-        let image = document.createElement('img');
-        image.src = canvas.toDataURL('image/png');
-
-        this.doUpload(image);
-      }
-
-      curImage.setAttribute('crossOrigin', 'anonymous');
-      curImage.src = link;
-    },
-
-
     createImage: function(source) {
       let pastedImage = new Image();
       pastedImage.onload = function() {
@@ -456,10 +418,7 @@ export default {
 
     syncTags(id) {
 
-      alert('sync  ' + id);
-      // const tags = this.allTags[id];
-      id = '5a18cf00ff23740b5ec52185';
-      const tags = ['one', 'two', 'three'];
+      const tags = this.allTags[id];
 
       console.log(tags);
       let apiPath = `${this.$config.SERVER}${this.$config.SERVER_PORT}/api/synctags`,              
