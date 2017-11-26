@@ -251,7 +251,7 @@ export default {
 
     setTimeout(() => {
       s.initMapAutocomplete();
-      }, 500);
+      }, 12500);
     },
 
   methods: {
@@ -309,6 +309,8 @@ export default {
     },
 
     initMapAutocomplete() {
+
+      // may have a loading/tioming issue here
       this.geocoder = new google.maps.Geocoder();
 
       let clearIcon = document.getElementsByTagName('input-group__append-icon');

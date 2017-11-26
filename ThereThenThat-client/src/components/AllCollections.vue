@@ -75,6 +75,8 @@ export default {
 
     getTTTList() {
       // call server for JSON data
+      console.log(`go check..   http://${this.SERVER_HOST}:${this.SERVER_PORT}`);
+
       fetch(`http://${this.SERVER_HOST}:${this.SERVER_PORT}`)
         .then(response => response.json())
         .then(response => {

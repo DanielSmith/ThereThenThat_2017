@@ -1,3 +1,4 @@
+
 /*
 **  router.js
 */
@@ -57,11 +58,17 @@ app.get('/:location/:time/:tags/:people/:options', function(req, res, next) {
 // list all collections
 app.get('/', function(req, res) {
 
+  console.log('.....  get...');
+
   Container.find({})
     .exec(function(err, existingAddress) {
 
-      if (err) { return next(err); }
-
+      if (err) {
+        console.log(err);
+        return next(err);
+      }
+      
+      console.log(existingAddress);
       if (existingAddress) {
         return res.status(200).json(existingAddress);
       } else {

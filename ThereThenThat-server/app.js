@@ -12,6 +12,9 @@ const apiRouter = require("./api");
 const tttconfig = require("./config.json");
 const mongoose = require('mongoose');
 
+
+
+console.log(tttconfig.MONGO_DB_CONNECT);
 mongoose.connect(tttconfig.MONGO_DB_CONNECT, {
   useMongoClient: true,
 });  
