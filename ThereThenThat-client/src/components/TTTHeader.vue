@@ -1,6 +1,8 @@
 <template>
-  <v-toolbar fixed class="indigo darken-4" dark>
+  <v-toolbar class="indigo darken-4" app dark>
     <v-toolbar-title><a href="/">ThereThenThat</a></v-toolbar-title>
+    <v-spacer></v-spacer>
+
   </v-toolbar>
 </template>
 

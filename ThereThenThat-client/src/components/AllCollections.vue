@@ -7,7 +7,8 @@
   >
 
     <TTTHeader></TTTHeader>
-    <main>
+
+  <v-content>
       <SearchAndCreate></SearchAndCreate>
 
       <v-container fluid>
@@ -21,7 +22,8 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </main>
+
+  </v-content>
   </v-app>
 </template>
 

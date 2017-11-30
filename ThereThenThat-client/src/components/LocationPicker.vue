@@ -57,13 +57,15 @@ export default {
         let lng = e.latLng.lng();
         let latlng = {lat: lat, lng: lng };
 
+
         this.$store.dispatch('mapUpdate', latlng);
         this.geocoder.geocode({'location': latlng}, (results, status) => {
+
           if (status === 'OK') {
             if (results[0]) {
+
               this.$store.dispatch('addressUpdate', results[0].formatted_address);
               this.theLocation = results[0].formatted_address;
-
               this.setMapMarker(latlng);
             } else {
               window.alert('No results found');

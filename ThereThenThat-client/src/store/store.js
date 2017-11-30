@@ -31,7 +31,7 @@ export const store = new Vuex.Store({
     getMyCenter: state => state.location.center,
     getMyLatLng: state => state.location.latestLatLng,
     getMyAddress: state => state.location.address,
-    getMyAddressUpdate: state => state.location.addressUpdate,
+    // getMyAddressUpdate: state => state.location.addressUpdate,
     getMyDateTime(state) {
       return `${state.time.date} - ${state.time.time}`;
     },
@@ -46,14 +46,16 @@ export const store = new Vuex.Store({
     mapUpdate(state, payload) {
       state.location.latestLatLng = payload;
     },
-
+    
     // from autocomplete, need to update map
     addressUpdate(state, payload) {
-      // need a better approcach than this.. perhaps a unuque id
+      // need a better approcach than this.. perhaps a unique id
       // only purpose to this is so that we have a way to flag the
       // text input in another component that we made a change....
+      console.log('=--------------------addressUpdate  -----  ');
+      console.log(payload);
 
-      state.location.addressUpdated = datefns.getTime(new Date());
+      // state.location.addressUpdated = datefns.getTime(new Date());
       state.location.address = payload;
     },
 

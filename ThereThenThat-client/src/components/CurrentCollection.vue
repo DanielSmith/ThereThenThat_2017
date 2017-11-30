@@ -8,8 +8,8 @@
 
     <TTTHeader></TTTHeader>
 
-    <main>
-      <SearchAndCreate></SearchAndCreate>
+    <!-- <main> -->
+      <!-- <SearchAndCreate></SearchAndCreate> -->
       <v-container fluid>
         <v-layout row v-for="curItem in this.pastedList" key="curKey++">
           <v-flex xs8 class="mediaBox">
@@ -79,7 +79,7 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </main>
+    <!-- </main> -->
   </v-app>
 </template>
 

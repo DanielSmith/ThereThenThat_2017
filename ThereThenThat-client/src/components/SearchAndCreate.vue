@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-layout row wrap pb-2>
+    <v-layout row pb-2>
       <v-flex xs4 pr-3>
 
           <!--
@@ -139,7 +139,7 @@ export default {
   computed: {
    ...mapGetters({
       addressFromMap: 'getMyAddress',
-      addressUpdated: 'getMyAddressUpdate',
+      // addressUpdated: 'getMyAddressUpdate',
       latLngUpdated: 'getMyLatLng',
       dateTimeFromPicker: 'getMyDateTime'
     })
@@ -149,6 +149,9 @@ export default {
   watch: {
     // update our text input if the map is clicked...
     addressFromMap() {
+
+
+      // alert('add..' + this.addressFromMap);
       this.theLocation = this.addressFromMap;
     },
 
@@ -157,9 +160,9 @@ export default {
       this.lng = this.lngLngUpdated.lat;  
     },
     
-    addressUpdated() {
-      this.addressFromMap;
-    },
+    // addressUpdated() {
+    //   this.addressFromMap;
+    // },
 
     latLngUpdated() {
       this.lat = this.latLngUpdated.lat;
@@ -251,7 +254,7 @@ export default {
 
     setTimeout(() => {
       s.initMapAutocomplete();
-      }, 12500);
+      }, 500);
     },
 
   methods: {
@@ -297,6 +300,7 @@ export default {
     },
 
     doClearLocation() {
+      console.log('called doClear...');
       this.theLocation = '';
     },
 
@@ -321,6 +325,7 @@ export default {
         const place = autocomplete.getPlace();
 
 
+        console.log('place changhed event...');
         console.dir(place);
 
         if (place === null) {
@@ -343,6 +348,9 @@ export default {
           
         //   `)
         }
+
+
+        console.log('need to update the location... ');
 
         this.theLocation = place.formatted_address;
         this.$store.commit('autocompletePlace', place);
@@ -467,13 +475,13 @@ export default {
 
 /* transition stuff */
 .expand-move {
-  transition: all 1600ms ease-in-out 650ms;
+  transition: all 500ms ease-in-out 500ms;
 }
 
 
 .expand-enter-active,
 .expand-leave-active {
-  transition: opacity 1100ms;
+  transition: opacity 500ms;
 }
 
 .expand-enter,
