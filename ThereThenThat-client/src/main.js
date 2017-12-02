@@ -3,8 +3,8 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify'
 import App from './App';
-import router from './router';
 import config from './config'
+import router from './router';
 import  { store } from './store/store';
 
 Vue.use(Vuetify);

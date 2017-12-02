@@ -16,7 +16,7 @@
         <v-layout row wrap>
           <v-flex xs12>
             <v-card flat pb-5 v-for="item in mainList" :key="item._id">
-              <h4><a :href="item.address">{{ item.title }}</a></h4>
+              <h4><a :href="item.fullURL">{{ item.title }}</a></h4>
               <p>{{ item.description }}</p>
             </v-card>
           </v-flex>
@@ -50,16 +50,17 @@ export default {
   watch: {
     searchFromStore() {
       this.mainList = this.searchFromStore;
+
+      // supplement with the full server address
+      this.mainList.map(cur => {
+        cur.fullURL = `${this.$config.SERVER}${this.$config.SERVER_PORT}${cur.address}`;
+      })
       console.dir(this.searchFromStore);
     }
   },
 
   data() {
     return {
-      // this really should be in some sort of global config
-      SERVER_HOST: 'localhost',
-      SERVER_PORT: '3100',
-
       mainList: []
     }
   },
@@ -77,12 +78,21 @@ export default {
 
     getTTTList() {
       // call server for JSON data
-      console.log(`go check..   http://${this.SERVER_HOST}:${this.SERVER_PORT}`);
 
-      fetch(`http://${this.SERVER_HOST}:${this.SERVER_PORT}`)
+      this.mainList = [];
+      fetch(`${this.$config.SERVER}${this.$config.SERVER_PORT}`)
         .then(response => response.json())
         .then(response => {
-          this.mainList = response;
+          // this.mainList = response;
+
+          response.map(cur => {
+            const newObj = cur;
+            // might change..
+            newObj.fullURL = `${cur.address}`;
+
+            console.dir(newObj);
+            this.mainList.push(newObj);
+          })
           console.dir(response);
         })
         .catch(err => {

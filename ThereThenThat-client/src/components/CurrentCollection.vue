@@ -111,10 +111,6 @@ export default {
 
       currentView: 'videoComponent',
 
-      // put this in some global config
-      SERVER_HOST: 'localhost',
-      SERVER_PORT: '3100',
-
       itemList: [],
       pastedList: [],
       addedList: [],
@@ -137,11 +133,14 @@ export default {
     // call server for JSON data
     getSingleCollection() {
 
-      const path = `http://${this.SERVER_HOST}:${this.SERVER_PORT}${this.$route.path}`;
+      const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}/${this.$route.path}`;
 
       fetch(path)
         .then(response => response.json())
         .then(response => {
+
+          console.dir(response);
+
 
           this.curCollectionList = response;
           this.curCollectionList.renderLinks = [];
@@ -162,10 +161,6 @@ export default {
 
             this.curCollectionList.renderLinks.push(newObj);
           });
-
-  console.log('==============');
-          console.log(JSON.stringify(this.curCollectionList));
-          console.log('==============');
         })        
         .catch(err => {
           console.log(err);
@@ -329,7 +324,7 @@ export default {
         headers: { 'content-type': 'multipart/form-data' }
       }
 
-      axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/fileupload`, uploadData, config)
+      axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/fileupload`, uploadData, config)
         .then(function (response) {
           console.log(response);
         })
@@ -373,7 +368,7 @@ export default {
     },
 
     getCurMedia(item) {
-      return `http://${this.SERVER_HOST}:${this.SERVER_PORT}/${item.path}`;
+      return `${this.$config.SERVER}${this.$config.SERVER_PORT}/${item.path}`;
     },
 
 

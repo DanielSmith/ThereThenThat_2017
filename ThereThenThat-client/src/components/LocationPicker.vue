@@ -12,6 +12,8 @@ import { eventBus } from '../event-bus';
 export default {
   data() {
     return {
+
+      // perhaps move this to config
       DEFAULT_ZOOM: 16,
       DEFAULT_LAT_LNG: {
         lat: 37.795,

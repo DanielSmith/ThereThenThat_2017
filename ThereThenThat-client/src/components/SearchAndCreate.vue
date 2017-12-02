@@ -424,7 +424,7 @@ export default {
         lng: this.lng,
         time: this.theDateTime,
         tags: this.theTags,
-        people: "daniel",
+        people: "",
         title: `from   ${this.theLocation}`,
         description: "test",
       })
