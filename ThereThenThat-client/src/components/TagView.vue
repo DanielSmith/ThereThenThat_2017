@@ -35,42 +35,13 @@
 
         <v-layout row wrap>
           <v-flex xs12>
-            <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
+            <v-card>
               <v-container fluid grid-list-lg>
                 <v-layout row wrap>
-                  <v-flex xs7 class="mediaBox">
-
-                    <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
-                    </component>
-
-
-                    <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
-                  </v-flex>
                   <v-flex xs4>
-                    <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
+<p> tag view....  {{ this.$route.params }} </p>
 
-                    <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
                   </v-flex>
-
-                  <v-form v-if="showEditTags[curItem.data._id]" ref="form">
-                    <v-layout pl-5 row>
-                      <v-flex xs4>
-                        <v-text-field
-                        label="Enter new tags"
-                        v-model="allTagEdits[curItem.data._id]"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs4>
-                        <v-btn @click="submitTags(curItem.data._id)">Add Tags</v-btn>
-                      </v-flex>
-                    </v-layout>
-                  </v-form>
-                  <v-btn  v-for="curTag in allTags[curItem.data._id]" key="curKey++"
-                    @click="chooseTag(curItem.data._id, curTag)"
-                    >
-                    <strong> {{ curTag }} </strong> 
-                    <span class="showEditTag" v-if="showEditTags[curItem.data._id]"> X  </span>
-                  </v-btn>
 
 
                 </v-layout>
@@ -95,7 +66,7 @@ import textComponent from './Text';
 import mimeUtils from '../../../common/mimeUtils';
 
 export default {
-  name: 'CurrentCollection',
+  name: 'TagView',
 
   components: {
     TTTHeader,
@@ -125,49 +96,18 @@ export default {
   },
 
   mounted: function() { 
-    this.getSingleCollection();
+    console.log('make a call to search tags....');
+    console.dir(this.$router);
+    // this.getSingleCollection();
   },
 
 
   methods: {
     // call server for JSON data
-    getSingleCollection() {
-
-      const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}${this.$route.path}`;
-      // const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}/34,34/time`;
-
-// alert(path);
-      fetch(path)
-        .then(response => response.json())
-        .then(response => {
-
-          console.dir(response);
-
-
-          this.curCollectionList = response;
-          this.curCollectionList.renderLinks = [];
-          this.curCollectionList.links.map(cur => {
-            let newObj = {};
-
-            newObj.data = cur;
-            console.log('cur is... ');
-            newObj.componentType = mimeUtils.getItemType(cur.fileName)
-            console.log(newObj);
-            newObj.tags = cur.tags || [];
-            newObj.id = cur._id;
-
-
-            this.$set(this.showEditTags, newObj.id, false);
-            this.$set(this.allTagEdits, newObj.id, '');
-            this.$set(this.allTags, newObj.id, newObj.tags);
-
-            this.curCollectionList.renderLinks.push(newObj);
-          });
-        })        
-        .catch(err => {
-          console.log(err);
-        });
+    getTagCollection() {
+      // TBD
     },
+
 
     getNewElementForType(theType) {
 
@@ -408,8 +348,6 @@ export default {
         this.syncTags(id);
       } else {
         tag = tag.trim();
-
-        this.$router.push({ name: 'TagView', params: { tags: tag }})
 
         let apiPath = `${this.$config.SERVER}${this.$config.SERVER_PORT}/api/gettags`,              
           dbArgs = { tagquery: tag }

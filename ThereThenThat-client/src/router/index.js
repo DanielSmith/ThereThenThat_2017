@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import TTTHeader from '@/components/TTTHeader';
 import AllCollections from '@/components/AllCollections';
 import CurrentCollection from '@/components/CurrentCollection';
+import TagView from '@/components/TagView';
 import TestCollection from '@/components/TestCollection';
 import About from '@/components/About';
 
@@ -15,6 +16,12 @@ export default new Router({
     path: '/',
     component: AllCollections,
     name: 'AllCollections'
+  },
+
+  {
+    path: '/api/gettags/:tags',
+    component: TagView,
+    name: 'TagView'
   },
 
   // handle TTT Addresses
