@@ -129,14 +129,28 @@ function separateParams(theParams) {
 
 function doValidations(params) {
 
+  console.log('in doV  .......');
+  // console.dir(params.location);
+  
+  
   let location = {}, time = {}, tags = {};
-
+  
   location = validateLocation(params.location);
   time = validateTime(params.time);
   tags = validateTags(params.tags);
   people = validatePeople(params.people);
   title = validateTitle(params.title);
   description = validateDescription(params.description);
+  
+  
+  // console.dir(location);
+  // console.dir(time);
+  // console.dir(tags);
+  // console.dir(people);
+  // console.dir(title);
+  // console.dir(description);
+  
+  // console.log('=================== in doV  .......');
 
   return {
     location, 
@@ -259,7 +273,7 @@ function validateTime(time = '_') {
   return timeParams;
 }
 
-function validateTags(tags) {
+function validateTags(tags = '') {
 
   let myTags = tags.trim().split(/[, ]/);
   let tagParams = { 
@@ -321,7 +335,7 @@ function createUploadFilename(ext = '') {
   return `${ts}-${unique}${ext}`;  
 }
 
-function validatePeople(people) {
+function validatePeople(people = '') {
 
   let myPeople = people.trim().split(/[, ]/);
   let peopleParams = { 
@@ -370,10 +384,13 @@ function validateDescription(description) {
 
 
 function makeAddress(validations) {
-  const location = validations.location;
-  const time = validations.time;
-  const people = validations.people;
-  const tags = validations.tags;
+
+
+  console.log(validations);
+  const location = validations.location || '_';
+  const time = validations.time || '_';
+  const people = validations.people || '';
+  const tags = validations.tags || '_';
 
   return `/${location.component}/${time.component}/${tags.component}/${people.component}`;  
 }

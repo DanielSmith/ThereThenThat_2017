@@ -17,18 +17,7 @@ export default new Router({
     name: 'AllCollections'
   },
 
-  {
-    path: '/about',
-    name: 'About',
-    component: About
-  },
-
   // handle TTT Addresses
-  {
-    path: '/tt',
-    name: 'Single',
-    component: CurrentCollection
-  },
   {
     path: '/:location/:time/:tags/:people/:options',
     name: 'SingleLTTPO',
@@ -52,7 +41,7 @@ export default new Router({
   {
     path: '/:location',
     name: 'SingleL',
-    component: TestCollection
+    component: CurrentCollection
   }
   ],
 });

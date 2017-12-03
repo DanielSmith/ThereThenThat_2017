@@ -9,8 +9,6 @@ mongoose.Promise = global.Promise;
 
 // define model
 const containerSchema = new Schema({
-  // address: { type: String, unique: true, lowercase: true },
-  address: { type: String, lowercase: true },
   id: String,
 
   version: String,
@@ -93,7 +91,7 @@ const linkSchema = new Schema({
   entryType: { type: String, default: "url" },
   timeSaved: { type: Date, default: Date.now },
   
-  // support for 1 external data item
+  // support for 1 external d ata item
   data: { type: String, default: "unused" },
   originalname: String,
   fileName: String,

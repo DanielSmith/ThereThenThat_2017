@@ -87,13 +87,14 @@ export default {
 
           response.map(cur => {
             const newObj = cur;
+
+
             // might change..
             newObj.fullURL = `${cur.address}`;
 
-            console.dir(newObj);
+            console.dir(Object.assign({},newObj));
             this.mainList.push(newObj);
           })
-          console.dir(response);
         })
         .catch(err => {
           console.log(err);

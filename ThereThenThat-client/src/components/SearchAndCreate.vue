@@ -203,6 +203,7 @@ export default {
       showSearchCreate: false,
 
       theLocation: "",
+      theAddress: "",
       theDateTime: "",
       theTags: "",
 
@@ -259,7 +260,6 @@ export default {
 
   methods: {
     checkLocationInput() {
-      console.log(this.theLocation);
       this.checkInputClear(this.theLocation, this.locationInputClear);
     },
 
@@ -413,19 +413,27 @@ export default {
     },
 
     createClick() {
+      console.log(this.lat);
+      console.log(this.lng);
+      console.log(this.theLocation);
       this.lat = this.lat || 0;
       this.lng = this.lng || 0;
+      this.theAddress = this.theLocation;
       this.theLocation = `${this.lat},${this.lng}`;
+
+
 
       // needs location and time..
       axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/create`, {
         location: this.theLocation,
+        address: this.theAddress,
         lat: this.lat,
         lng: this.lng,
         time: this.theDateTime,
         tags: this.theTags,
+        version: 0.3,
         people: "",
-        title: `from   ${this.theLocation}`,
+        title: `from   ${this.theAddress}`,
         description: "test",
       })
       .then(response => {

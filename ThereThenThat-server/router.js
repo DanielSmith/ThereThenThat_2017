@@ -27,29 +27,42 @@ app.get('/sockjs-node*', function(req, res, next) {
 // number of arguments
 app.get('/:location', function(req, res, next) {
   res.locals.params = tttUtils.separateParams(req.params);
+  
+  console.log('------lll ');
+  console.dir(req.params);
   next();
-});
+});  
 
 
 app.get('/:location/:time', function(req, res, next) {
+
+  console.log('------time');  
+  console.dir(req.params);
+
   res.locals.params = tttUtils.separateParams(req.params);
   next();
 });
 
 
 app.get('/:location/:time/:tags', function(req, res, next) {
+  console.log('------tags');
+  console.dir(req.params);
   res.locals.params = tttUtils.separateParams(req.params);
   next();
 });
 
 
 app.get('/:location/:time/:tags/:people', function(req, res, next) {
+  console.log('------people');
+  console.dir(req.params);
   res.locals.params = tttUtils.separateParams(req.params);
   next();
 });
 
 
 app.get('/:location/:time/:tags/:people/:options', function(req, res, next) {
+  console.log('------ options');
+  console.dir(req.params);
   res.locals.params = tttUtils.separateParams(req.params);
   next();
 });
@@ -72,7 +85,7 @@ app.get('/', function(req, res) {
       if (existingAddress) {
         return res.status(200).json(existingAddress);
       } else {
-        res.send('nope');
+        res.send(existingAddress);
       }
   });
 });
@@ -80,14 +93,23 @@ app.get('/', function(req, res) {
 
 
 // going for a specific collection
-app.get('*', function(req, res) {
+app.get('*', function(req, res, next) {
+  console.log('--parm LOCAL');
+  console.log(res.locals.params);
+  console.log('--parm LOCAL end ');
   if (res.locals.params === undefined) {
     res.send('bad url');
+
   } else {
     res.locals.validations = tttUtils.doValidations(res.locals.params);
   }
 
+
   res.locals.address = tttUtils.makeAddress(res.locals.validations);
+  
+  
+  console.log(res.locals);
+
 
   // fix this to sort by date
   Container.findOne({ address: res.locals.address })
@@ -98,7 +120,7 @@ app.get('*', function(req, res) {
     if (existingAddress) {
       return res.status(200).json(existingAddress);
     } else {
-      res.send('nope');
+      res.send(req.params);
     }
   });
 });

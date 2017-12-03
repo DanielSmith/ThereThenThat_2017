@@ -44,6 +44,9 @@ module.exports = router;
 // dont allow _/_/_
 router.post("/create", function (req, res, next) {
 
+  console.log(req.body);
+
+
   res.locals.params = tttUtils.separateParams(req.body);
   res.locals.validations = tttUtils.doValidations(res.locals.params);
 
@@ -87,11 +90,11 @@ router.post("/create", function (req, res, next) {
 
     gps: { coordinates: [ longitude, latitude] },
     tags: res.locals.validations.tags,
-    people: res.locals.validations.people,
+    // people: res.locals.validations.people,
     time: res.locals.validations.time,
     location: res.locals.validations.location,
     title: res.locals.validations.title,
-    description: res.locals.validations.description,
+    // description: res.locals.validations.description,
     address: address
   });
 

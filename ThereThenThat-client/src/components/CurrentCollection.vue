@@ -133,8 +133,10 @@ export default {
     // call server for JSON data
     getSingleCollection() {
 
-      const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}/${this.$route.path}`;
+      const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}${this.$route.path}`;
+      // const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}/34,34/time`;
 
+// alert(path);
       fetch(path)
         .then(response => response.json())
         .then(response => {
