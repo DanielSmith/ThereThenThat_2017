@@ -125,10 +125,20 @@ export default {
   },
 
   beforeRouteUpdate(to, from, next) {
-    console.log('before', this.$route.path);
+    console.log('beforeRouteUpdate', this.$route.path);
+    console.dir(this.$route);
+    // next(this.$route.path);
+  },
+  afterRouteUpdate(to, from, next) {
+    console.log('beforeRouteUpdate', this.$route.path);
+    console.dir(this.$route);
+    next(this.$route.path);
   },
 
-
+  beforeRouteEnter ( to, from, next ) {
+    console.log('Entering Bar')
+    next()
+  },
   mounted: function() {
     this.getTagView();
   },
@@ -421,12 +431,10 @@ export default {
         this.syncTags(id);
       } else {
         tag = tag.trim();
-        alert(` go push ${tag}`);
-        // this pushes over to TagView
-
 
         this.getTagView(tag);
-        // this.$router.push({ name: 'TagView', params: { tags: 'dylan' }});
+        // need to get the router working.. 
+        // this.$router.push({ name: 'TagView', params: { tags: tag  }});
       }
     },
 
