@@ -194,6 +194,8 @@ router.post("/addlink", function (req, res, next) {
 
 router.post('/gettags', function(req, res, next) {
   
+  console.dir(req.body.tagquery);
+
   let returnObj = {};
   if (req.body.tagquery === undefined ||
     req.body.tagquery === '') {

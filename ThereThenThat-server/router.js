@@ -94,22 +94,13 @@ app.get('/', function(req, res) {
 
 // going for a specific collection
 app.get('*', function(req, res, next) {
-  console.log('--parm LOCAL');
-  console.log(res.locals.params);
-  console.log('--parm LOCAL end ');
   if (res.locals.params === undefined) {
     res.send('bad url');
-
   } else {
     res.locals.validations = tttUtils.doValidations(res.locals.params);
   }
 
-
-  res.locals.address = tttUtils.makeAddress(res.locals.validations);
-  
-  
-  console.log(res.locals);
-
+  res.locals.address = tttUtils.makeAddress(res.locals.validations);  
 
   // fix this to sort by date
   Container.findOne({ address: res.locals.address })
