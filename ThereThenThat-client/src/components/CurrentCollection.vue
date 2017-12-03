@@ -44,7 +44,7 @@
                     </component>
 
 
-                    <v-btn @click="syncTags(curItem.data._id)">sync</v-btn>
+                    <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
                   </v-flex>
                   <v-flex xs4>
                     <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
