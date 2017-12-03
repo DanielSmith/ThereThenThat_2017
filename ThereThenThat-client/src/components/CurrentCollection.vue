@@ -409,21 +409,9 @@ export default {
       } else {
         tag = tag.trim();
 
+        // this pushes over to TagView
         this.$router.push({ name: 'TagView', params: { tags: tag }})
 
-        let apiPath = `${this.$config.SERVER}${this.$config.SERVER_PORT}/api/gettags`,              
-          dbArgs = { tagquery: tag }
-        // this.getMediaWithDB(tag, this.BY_KEYWORD);
-
-        const config = { headers: { 'Content-Type': 'application/json' } };
-
-        axios.post(apiPath, dbArgs, config)
-          .then(response => {
-            console.log(response);
-          })
-          .catch(err => {
-            console.log(err);
-          });
       }
     },
 
