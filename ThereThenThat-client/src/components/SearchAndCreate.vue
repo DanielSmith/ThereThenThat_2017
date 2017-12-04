@@ -141,7 +141,11 @@ export default {
       addressFromMap: 'getMyAddress',
       // addressUpdated: 'getMyAddressUpdate',
       latLngUpdated: 'getMyLatLng',
-      dateTimeFromPicker: 'getMyDateTime'
+      dateTimeFromPicker: 'getMyDateTime',
+      dateISO: 'getMyISODate',
+
+      theDate: 'getMyDate',
+      theTime: 'getMyTime',
     })
   },
 
@@ -205,6 +209,7 @@ export default {
       theLocation: "",
       theAddress: "",
       theDateTime: "",
+      theDateISO: "",
       theTags: "",
 
       lat: null,
@@ -421,7 +426,7 @@ export default {
       this.theAddress = this.theLocation;
       this.theLocation = `${this.lat},${this.lng}`;
 
-
+      const theDateTime = `${this.theDate} ${this.theTime}`;
 
       // needs location and time..
       axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/create`, {
@@ -433,7 +438,7 @@ export default {
         tags: this.theTags,
         version: 0.3,
         people: "",
-        title: `from   ${this.theAddress}`,
+        title: `from  v2  rs ${this.theAddress}`,
         description: "test",
       })
       .then(response => {

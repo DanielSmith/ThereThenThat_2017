@@ -125,20 +125,11 @@ export default {
   },
 
   beforeRouteUpdate(to, from, next) {
-    console.log('beforeRouteUpdate', this.$route.path);
-    console.dir(this.$route);
-    // next(this.$route.path);
-  },
-  afterRouteUpdate(to, from, next) {
-    console.log('beforeRouteUpdate', this.$route.path);
-    console.dir(this.$route);
-    next(this.$route.path);
+    // I am thinking this is not the correct way to do this...?
+    this.getTagView(to.params.tags);
+    next();
   },
 
-  beforeRouteEnter ( to, from, next ) {
-    console.log('Entering Bar')
-    next()
-  },
   mounted: function() {
     this.getTagView();
   },
@@ -432,9 +423,9 @@ export default {
       } else {
         tag = tag.trim();
 
-        this.getTagView(tag);
+        // this.getTagView(tag);
         // need to get the router working.. 
-        // this.$router.push({ name: 'TagView', params: { tags: tag  }});
+        this.$router.push({ name: 'TagView', params: { tags: tag  }});
       }
     },
 

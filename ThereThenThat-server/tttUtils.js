@@ -1,3 +1,4 @@
+
 /*
 **  tttUils.js
 */
@@ -128,10 +129,6 @@ function separateParams(theParams) {
 
 
 function doValidations(params) {
-
-  console.log('in doV  .......');
-  // console.dir(params.location);
-  
   
   let location = {}, time = {}, tags = {};
   
@@ -240,7 +237,19 @@ function validateLocation(location = '_') {
   return locationParams;
 }
 
-function validateTime(time = '_') {
+function validateTime(time = '') {
+
+  const parsed = datefns.parse(time);
+
+  console.log(`
+    
+  ${time}
+  ${parsed}
+  
+  `);
+
+
+  // we wil need to do something with parsed...
 
   let timeParams = { 
     component: "_",
@@ -250,12 +259,29 @@ function validateTime(time = '_') {
     // the "not specified" case
   if (time === "_" || time === "*") {
     timeParams.component = time;
+
     return timeParams;
   }
+  console.dir(timeParams);
 
   if (!validator.isISO8601(time))  {
     timeParams.error.push(STATUS_TIME_ERR);
+
+
+    console.dir(timeParams);
+    
+
     return timeParams;
+  } else {
+
+    console.log(`
+    
+    fine...........rs
+
+    
+    
+    `);
+
   }
 
   // convert this to use date-fns

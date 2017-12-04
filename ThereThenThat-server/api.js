@@ -43,9 +43,10 @@ module.exports = router;
 // TBD: allow for just one main component (location, time, or tags)
 // dont allow _/_/_
 router.post("/create", function (req, res, next) {
-
   console.log(req.body);
 
+  res.send('ok');
+  next();
 
   res.locals.params = tttUtils.separateParams(req.body);
   res.locals.validations = tttUtils.doValidations(res.locals.params);

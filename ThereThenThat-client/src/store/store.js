@@ -19,6 +19,7 @@ export const store = new Vuex.Store({
       time: ''
     },
 
+
     tags: {
 
     },
@@ -34,6 +35,21 @@ export const store = new Vuex.Store({
     // getMyAddressUpdate: state => state.location.addressUpdate,
     getMyDateTime(state) {
       return `${state.time.date} - ${state.time.time}`;
+    },
+    
+
+    getMyDate: state => state.time.date,
+    getMyTime: state => state.time.time,
+
+    getMyISODate(state) {
+      const parsedDate = datefns.parse(`${state.time.date} ${state.time.time}`);
+
+      console.log(`
+      parsed.............    ${parsedDate}
+      
+      `);
+
+      return parsedDate;
     },
 
     getMySearchResult: state => state.searchData

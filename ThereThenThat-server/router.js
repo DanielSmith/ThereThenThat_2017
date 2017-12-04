@@ -28,16 +28,16 @@ app.get('/sockjs-node*', function(req, res, next) {
 app.get('/:location', function(req, res, next) {
   res.locals.params = tttUtils.separateParams(req.params);
   
-  console.log('------lll ');
-  console.dir(req.params);
+  // console.log('------lll ');
+  // console.dir(req.params);
   next();
 });  
 
 
 app.get('/:location/:time', function(req, res, next) {
 
-  console.log('------time');  
-  console.dir(req.params);
+  // console.log('------time');  
+  // console.dir(req.params);
 
   res.locals.params = tttUtils.separateParams(req.params);
   next();
@@ -45,16 +45,16 @@ app.get('/:location/:time', function(req, res, next) {
 
 
 app.get('/:location/:time/:tags', function(req, res, next) {
-  console.log('------tags');
-  console.dir(req.params);
+  // console.log('------tags');
+  // console.dir(req.params);
   res.locals.params = tttUtils.separateParams(req.params);
   next();
 });
 
 
 app.get('/:location/:time/:tags/:people', function(req, res, next) {
-  console.log('------people');
-  console.dir(req.params);
+  // console.log('------people');
+  // console.dir(req.params);
   res.locals.params = tttUtils.separateParams(req.params);
   next();
 });
@@ -70,8 +70,6 @@ app.get('/:location/:time/:tags/:people/:options', function(req, res, next) {
 
 // list all collections
 app.get('/', function(req, res) {
-
-  console.log('.....  get...');
 
   Container.find({})
     .exec(function(err, existingAddress) {
