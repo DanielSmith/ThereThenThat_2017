@@ -34,7 +34,10 @@ export const store = new Vuex.Store({
     getMyAddress: state => state.location.address,
     // getMyAddressUpdate: state => state.location.addressUpdate,
     getMyDateTime(state) {
-      return `${state.time.date} - ${state.time.time}`;
+      return `${state.time.date} ${state.time.time}`;
+    },
+    getMyDateTimeSend(state) {
+      return `${state.time.date}T${state.time.time}`;
     },
     
 

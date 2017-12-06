@@ -43,10 +43,6 @@ module.exports = router;
 // TBD: allow for just one main component (location, time, or tags)
 // dont allow _/_/_
 router.post("/create", function (req, res, next) {
-  console.log(req.body);
-
-  res.send('ok');
-  next();
 
   res.locals.params = tttUtils.separateParams(req.body);
   res.locals.validations = tttUtils.doValidations(res.locals.params);
@@ -62,73 +58,67 @@ router.post("/create", function (req, res, next) {
 
     if (existingAddress) {
       // troubles with this..
-      res.writeHead(200, {"Content-Type": "application/json"});
-      res.end(JSON.stringify(existingAddress));
+      // res.writeHead(200, {"Content-Type": "application/json"});
+      // res.send(JSON.stringify(existingAddress));
+      res.json(existingAddress);
+    } else {
+
+      // we're good to go...
+      // const longitude = parseFloat(res.locals.validations.lng);
+      // const latitude = parseFloat(res.locals.validations.lat);
+      
+      // const longitude = '29.0';
+      // const latitude =  '29.0';
+      
+      const longitude = parseFloat(res.locals.validations.location.longitude);
+      const latitude = parseFloat(res.locals.validations.location.latitude);
+  
+      const ttt = new Container({
+        version: "1",
+  
+        gps: { coordinates: [ longitude, latitude] },
+        tags: res.locals.validations.tags,
+        // people: res.locals.validations.people,
+        time: res.locals.validations.time,
+        location: res.locals.validations.location,
+        title: res.locals.validations.title,
+        // description: res.locals.validations.description,
+        address: address
+      });
+  
+      ttt.save(function(err, newContainer) {
+        if (err) { return next(err); }
+  
+        // get the container id, and launch a query to google maps
+        // to get more info about this lat/lon
+  
+        const gcLatitude = newContainer.location.latitude;
+        const gcLongitude = newContainer.location.longitude;
+        const gcAddress = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${gcLatitude},${gcLongitude}&key=AIzaSyCmM-nTQGEZymwEvI0wHbDn9Dwh8Vdfn3s`;
+  
+        http.get(gcAddress)
+          .then(function(resultJson) {
+            // saving the json from the call to google maps as an object
+            const gc = new GeoCode({
+              geoData: resultJson
+            });
+  
+            gc.save(function(err, newGC) {
+              if (err) { console.log('ERROR: ',  err); }
+            });
+  
+            returnObj = {};
+            returnObj.status = 'ok';
+            
+            // errors on this...
+            res.writeHead(200, {"Content-Type": "application/json"});
+            res.end(JSON.stringify(returnObj));  
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+      });
     }
-  });
-
-
-  console.log('------------------');
-  console.log(res.locals.validations);
-  console.log('------------------');
-
-  // we're good to go...
-  // const longitude = parseFloat(res.locals.validations.lng);
-  // const latitude = parseFloat(res.locals.validations.lat);
-  
-  // const longitude = '29.0';
-  // const latitude =  '29.0';
-  
-  const longitude = parseFloat(res.locals.validations.location.longitude);
-  const latitude = parseFloat(res.locals.validations.location.latitude);
-
-  console.log(`long: ${longitude}`)
-  console.log(`lat: ${latitude}`)
-
-
-  const ttt = new Container({
-    version: "1",
-
-    gps: { coordinates: [ longitude, latitude] },
-    tags: res.locals.validations.tags,
-    // people: res.locals.validations.people,
-    time: res.locals.validations.time,
-    location: res.locals.validations.location,
-    title: res.locals.validations.title,
-    // description: res.locals.validations.description,
-    address: address
-  });
-
-  console.log(ttt);
-
-  ttt.save(function(err, newContainer) {
-    if (err) { return next(err); }
-
-    // get the container id, and launch a query to google maps
-    // to get more info about this lat/lon
-
-    const gcLatitude = newContainer.location.latitude;
-    const gcLongitude = newContainer.location.longitude;
-    const gcAddress = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${gcLatitude},${gcLongitude}&key=AIzaSyCmM-nTQGEZymwEvI0wHbDn9Dwh8Vdfn3s`;
-
-    http.get(gcAddress)
-      .then(function(resultJson) {
-        // saving the json from the call to google maps as an object
-        const gc = new GeoCode({
-          geoData: resultJson
-        });
-
-        gc.save(function(err, newGC) {
-          if (err) { console.log('ERROR: ',  err); }
-        });
-
-        // errors on this...
-        res.send('saved map data');
-        res.end();
-    })
-    .catch(function(err) {
-        console.log(err);
-    });
   });
 });
 

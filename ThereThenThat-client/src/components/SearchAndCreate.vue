@@ -418,15 +418,39 @@ export default {
     },
 
     createClick() {
-      console.log(this.lat);
-      console.log(this.lng);
-      console.log(this.theLocation);
       this.lat = this.lat || 0;
       this.lng = this.lng || 0;
       this.theAddress = this.theLocation;
       this.theLocation = `${this.lat},${this.lng}`;
 
-      const theDateTime = `${this.theDate} ${this.theTime}`;
+      let formattedHourMin = '';
+      let pickerTime = this.theTime;
+
+      let isPM = false;
+      if (pickerTime.indexOf('pm') > 0) {
+        isPM = true;
+      }
+
+      // and drop the am or pm...
+      pickerTime = pickerTime.replace(/(am|pm)/, '');
+
+      let [hour, mins] = pickerTime.split(':');
+
+      if (isPM && hour !== 12) {
+        hour = parseInt(hour) + 12;
+      }
+
+      if (isPM === false && hour == 12) {
+        hour = '0';
+      }
+
+      if (hour < 10) {
+        hour = `0${hour}`;
+      }
+
+
+      formattedHourMin = `${hour}:${mins}`;
+      const theDateTime = `${this.theDate} ${formattedHourMin}`;
 
       // needs location and time..
       axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/create`, {
@@ -434,7 +458,7 @@ export default {
         address: this.theAddress,
         lat: this.lat,
         lng: this.lng,
-        time: this.theDateTime,
+        time: theDateTime,
         tags: this.theTags,
         version: 0.3,
         people: "",
@@ -447,7 +471,6 @@ export default {
       .catch(err => {
         console.log(err);
       })
-
     }
   }   
 }

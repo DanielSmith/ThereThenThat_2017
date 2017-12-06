@@ -141,7 +141,9 @@ function doValidations(params) {
   
   
   // console.dir(location);
-  // console.dir(time);
+  console.log('-------time');
+  console.dir(time);
+  console.log('-------time');
   // console.dir(tags);
   // console.dir(people);
   // console.dir(title);
@@ -237,51 +239,31 @@ function validateLocation(location = '_') {
   return locationParams;
 }
 
+
+// needs work.. rough for now
 function validateTime(time = '') {
-
-  const parsed = datefns.parse(time);
-
-  console.log(`
-    
-  ${time}
-  ${parsed}
   
-  `);
-
-
-  // we wil need to do something with parsed...
-
   let timeParams = { 
     component: "_",
     error: []
   };
-
-    // the "not specified" case
+  
+  // the "not specified" case
   if (time === "_" || time === "*") {
     timeParams.component = time;
-
+    
     return timeParams;
   }
-  console.dir(timeParams);
+  
+  // ok, lets see what we really have...
+  const cleanDate = time.replace(' - ', ' ');
+  const timeElems = cleanDate.split(' ');
+  const hours = datefns.format(`${timeElems[0]} ${timeElems[1]}`);
+  time = hours;
 
   if (!validator.isISO8601(time))  {
     timeParams.error.push(STATUS_TIME_ERR);
-
-
-    console.dir(timeParams);
-    
-
     return timeParams;
-  } else {
-
-    console.log(`
-    
-    fine...........rs
-
-    
-    
-    `);
-
   }
 
   // convert this to use date-fns
