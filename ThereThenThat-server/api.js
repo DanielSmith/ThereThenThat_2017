@@ -297,6 +297,8 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
 router.post("/search", function (req, res, next) {
 
   let query = {};
+  let returnObj = {};
+  
 
   const title = req.body.title || '';
   const description = req.body.description || '';
@@ -337,7 +339,7 @@ router.post("/search", function (req, res, next) {
     query['people.allPeople'] = tttUtils.createMultiMatchSearch(people);
   }
 
-  tttUtils.logfulltree(query) ;
+  // tttUtils.logfulltree(query) ;
 
   Container.find(query)
     .exec(function(err, foundCollections) {
@@ -347,7 +349,14 @@ router.post("/search", function (req, res, next) {
       return next(err); }
 
     if (foundCollections) {
-      return res.status(200).json(foundCollections);
+
+      console.log(foundCollections);
+      returnObj.status = "ok";
+      returnObj.searchInfo = foundCollections;
+
+      // res.writeHead(200, {"Content-Type": "application/json"});    
+      res.json(returnObj);
+
     } else {
       res.send('nope');
     }

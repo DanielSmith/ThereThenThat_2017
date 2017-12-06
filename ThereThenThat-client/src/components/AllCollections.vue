@@ -43,19 +43,37 @@ export default {
   
   computed: {
   ...mapGetters({
-    searchFromStore: 'getMySearchResult'
+      searchFromStore: 'getMySearchResult'
     })
   },
 
   watch: {
     searchFromStore() {
-      this.mainList = this.searchFromStore;
 
+      const theResult = this.searchFromStore;
+      console.log(theResult);
+      this.mainList = []; // this.searchFromStore;
+
+
+      theResult.map(cur => {
+
+        let newObj = {};
+        newObj = cur;
+        // might change..
+        newObj.fullURL = `${cur.address}`;
+
+        alert(cur.address);
+
+
+        this.mainList.push(newObj);
+      });
+
+      console.log(this.mainList);
       // supplement with the full server address
-      this.mainList.map(cur => {
-        cur.fullURL = `${this.$config.SERVER}${this.$config.SERVER_PORT}${cur.address}`;
-      })
-      console.dir(this.searchFromStore);
+      // this.mainList.map(cur => {
+      //   cur.fullURL = `${this.$config.SERVER}${this.$config.SERVER_PORT}${cur.address}`;
+      // })
+      // console.dir(this.searchFromStore);
     }
   },
 

@@ -102,8 +102,10 @@ export const store = new Vuex.Store({
     },
     
     searchResultUpdate(state, payload) {
-      state.searchData = Object.assign({}, payload);
-      console.log(state);
+
+      state.searchData = payload;
+      console.log('==============');
+      console.log(state.searchData);
       console.log('==============');
     }
   },
@@ -131,6 +133,7 @@ export const store = new Vuex.Store({
     },
     
     searchResultUpdate({commit} , payload) {
+      console.dir(JSON.parse(payload));
       commit('searchResultUpdate', payload);      
     }
   },

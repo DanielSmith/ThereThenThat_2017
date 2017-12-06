@@ -141,9 +141,7 @@ function doValidations(params) {
   
   
   // console.dir(location);
-  console.log('-------time');
-  console.dir(time);
-  console.log('-------time');
+  // console.dir(time);
   // console.dir(tags);
   // console.dir(people);
   // console.dir(title);

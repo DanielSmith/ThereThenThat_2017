@@ -153,9 +153,6 @@ export default {
   watch: {
     // update our text input if the map is clicked...
     addressFromMap() {
-
-
-      // alert('add..' + this.addressFromMap);
       this.theLocation = this.addressFromMap;
     },
 
@@ -164,18 +161,9 @@ export default {
       this.lng = this.lngLngUpdated.lat;  
     },
     
-    // addressUpdated() {
-    //   this.addressFromMap;
-    // },
-
     latLngUpdated() {
       this.lat = this.latLngUpdated.lat;
       this.lng = this.latLngUpdated.lng;
-
-    // alert(` hello... 
-    //   ${this.lat},
-    //   ${this.lng},
-    //   `);
     },
 
     dateTimeFromPicker() {
@@ -337,21 +325,9 @@ export default {
           return;
         }
 
-        // if (place.geometry && place.geometry.location) {
-        //   this.lat = place.geometry.location.lat();
-        //   this.lng = place.geometry.location.lng();
-        // }
-
         if (place.geometry.location.lat && place.geometry.location.lng) {
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
-
-        //   alert(`
-        //   it is
-        //   ${this.lat}
-        //   ${this.lng}
-          
-        //   `)
         }
 
 
@@ -403,14 +379,18 @@ export default {
 
     searchClick() {
 
+      const config = { headers: { 'Content-Type': 'application/json' } };
+
       axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/search`, {
         location: this.theLocation,
         time: this.theDateTime,
         tags: this.theTags
-      })
+      }, config)
       .then(response => {
-        const myObj = response.data;
-        this.$store.commit('searchResultUpdate', myObj);
+        const myObj = JSON.stringify(response.data.searchInfo);
+
+
+        this.$store.commit('searchResultUpdate', response.data.searchInfo);
       })
       .catch(err => {
         console.log(err);
@@ -426,6 +406,9 @@ export default {
       let formattedHourMin = '';
       let pickerTime = this.theTime;
 
+
+      // put this time handling off into
+      // some util function
       let isPM = false;
       if (pickerTime.indexOf('pm') > 0) {
         isPM = true;
@@ -447,7 +430,6 @@ export default {
       if (hour < 10) {
         hour = `0${hour}`;
       }
-
 
       formattedHourMin = `${hour}:${mins}`;
       const theDateTime = `${this.theDate} ${formattedHourMin}`;
