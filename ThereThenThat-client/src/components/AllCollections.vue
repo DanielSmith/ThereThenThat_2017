@@ -101,16 +101,10 @@ export default {
       fetch(`${this.$config.SERVER}${this.$config.SERVER_PORT}`)
         .then(response => response.json())
         .then(response => {
-          // this.mainList = response;
-
           response.map(cur => {
             const newObj = cur;
-
-
             // might change..
             newObj.fullURL = `${cur.address}`;
-
-            console.dir(Object.assign({},newObj));
             this.mainList.push(newObj);
           })
         })

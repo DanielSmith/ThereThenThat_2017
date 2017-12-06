@@ -406,6 +406,8 @@ export default {
       let formattedHourMin = '';
       let pickerTime = this.theTime;
 
+      let betweenAddDate = '';
+      let betweenDateTags = '';
 
       // put this time handling off into
       // some util function
@@ -434,6 +436,14 @@ export default {
       formattedHourMin = `${hour}:${mins}`;
       const theDateTime = `${this.theDate} ${formattedHourMin}`;
 
+      if (this.theAddress !== '' && this.theDateTime !== '') {
+        betweenAddDate = ' - ';
+      }
+      if ((this.theAddress !== '' || this.theDateTime !== '') &&
+          this.theTags !== '') {
+          betweenDateTags = ' - ';
+      }
+
       // needs location and time..
       axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/create`, {
         location: this.theLocation,
@@ -444,7 +454,7 @@ export default {
         tags: this.theTags,
         version: 0.3,
         people: "",
-        title: `from  v2  rs ${this.theAddress}`,
+        title: `${this.theAddress}${betweenAddDate}${this.theDate}${betweenDateTags}${this.theTags}`,
         description: "test",
       })
       .then(response => {
