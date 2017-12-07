@@ -156,10 +156,11 @@ export default {
             newObj.tags = cur.tags || [];
             newObj.id = cur._id;
 
-
             this.$set(this.showEditTags, newObj.id, false);
             this.$set(this.allTagEdits, newObj.id, '');
             this.$set(this.allTags, newObj.id, newObj.tags);
+
+            console.dir(newObj);
 
             this.curCollectionList.renderLinks.push(newObj);
           });
@@ -300,6 +301,7 @@ export default {
           let newObj = {};
           newObj.componentType = mimeUtils.getItemType(curFileData.ext);
           newObj.data = droppedItem;
+          newObj.data.path = droppedItem.curSrc;
 
           droppedItem.onload = () => {
             // this.showDropHelp = 0;
@@ -307,6 +309,8 @@ export default {
 
           droppedItem.src = reader.result;
           this.addedList.push(newObj);
+
+          // this.curCollectionList.renderLinks.push(newObj);
         }
 
         reader.readAsDataURL(curFile);

@@ -318,7 +318,7 @@ export default {
         const place = autocomplete.getPlace();
 
 
-        console.log('place changhed event...');
+        console.log('place changed event...');
         console.dir(place);
 
         if (place === null) {
@@ -459,6 +459,15 @@ export default {
       })
       .then(response => {
         console.log(response);
+        
+        // tell the router to go home...
+        // this is temporary.. kinda brute force...
+        // what really should happen is to tell the main collection list
+        // to update... 
+        // although.. this does bring up the question as to what we
+        // should do when creating a collection from another...
+        // perhaps we should go directly to the new collection in all cases?
+        this.$router.go('/')
       })
       .catch(err => {
         console.log(err);
