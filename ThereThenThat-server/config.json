@@ -1,5 +1,4 @@
 {
-  "MONGO_DB_HOST": "mongo host",
   "MONGO_DB_CONNECT": "mongodb://localhost/mytttapp",
   "SERVER_ADDRESS": "http://localhost:3100",
   "SERVER_PORT": "3100",
