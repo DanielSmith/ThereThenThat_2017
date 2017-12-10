@@ -31,8 +31,9 @@ A simpler form of this project is my work on [SnapperStore](https://github.com/D
 ## Build Setup
 
 After cloning the repository, you will see this top level directory structure:
-```
 
+
+``` bash
 ThereThenThat
 ├── ThereThenThat-client
 │   ├── build
@@ -53,14 +54,6 @@ ThereThenThat
 
 ```
 
-### A few notes on dependencies:
-
-There will be a future document about the architecture of ThereThenThat.  In broad strokes, the server side is a headless CMS, and the dev client runs in a completely seperate Node/Webpack/Vue.js environment. There is also a dependency on having a working MongoDB instance.
-
-* Client - Vue.js, Vuetify, Vuex, Google Maps API
-* Server - Node.js, Express, Multer, Mongoose, MongoDB
-
-Open up two shells - one for server, one for client.
 
 ### Server Side
 ``` bash
@@ -70,7 +63,7 @@ cd ThereThenThat-server
 
 The configuration for the server is kept in config.json:
 
-```
+``` bash
 {
   "MONGO_DB_HOST": "mongo host",
   "MONGO_DB_CONNECT": "mongodb://localhost/mytttapp",
@@ -80,7 +73,9 @@ The configuration for the server is kept in config.json:
 }
 ```
 
+These defaults should be fine for a local development environment.
 
+``` bash
 # install dependencies
 npm install
 
@@ -100,17 +95,58 @@ modules: none
 build environment:
     distarch: x86_64
     target_arch: x86_64
-  ```
-
+```
 
 ### Client Side
 
 ``` bash
 cd ThereThenThat-client
+```
 
+The configuration for the client is kept in src/config.js:
+
+``` bash
+const configs = {
+  ENV: 'Local Dev',
+  CLIENT: 'http://localhost:8080',
+  SERVER: 'http://localhost',
+  SERVER_PORT: ':3100'  
+}
+```
+
+
+``` bash
 # install dependencies
 npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
+```
 
+
+### Getting Started
+
+(grab notes from SnapperStore)
+
+
+## Some Notes
+
+### Article: 
+
+### Article: Deploy on Digital Ocean
+
+See this TK article for a walkthrough of setting up ThereThenThat on Digital Ocean. Use my referral code for a discount on setting up a Digital Ocean account:  https://m.do.co/c/c295876bd25b
+
+### Repo & Article: SnapperStore on Digital Ocean
+
+My companion project to ThereThenThat is SnapperStore.  It has a different focus.
+
+* Github: https://github.com/DanielSmith/snapperstore
+* Medium Post: https://medium.com/@javajoint/deploying-snapperstore-with-digital-ocean-949280312fa
+
+### A few notes on dependencies:
+
+There will be a future document about the architecture of ThereThenThat.  In broad strokes, the server side is a headless CMS, and the dev client runs in a completely seperate Node/Webpack/Vue.js environment. There is also a dependency on having a working MongoDB instance.
+
+* Client - Vue.js, Vuetify, Vuex, Google Maps API
+* Server - Node.js, Express, Multer, Mongoose, MongoDB
