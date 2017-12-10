@@ -1,9 +1,4 @@
 {
-  "USING_DB": 1,
-  "USING_EMAIL": 0,
-  "SENDGRID_API_KEY": "your sendgrid api key",
-  "SS_ADMIN_EMAIL": "youradmin@yourdomain.com",
-  "SS_ADMIN_FROM": "whoSentIt@example.com",
   "MONGO_DB_HOST": "mongo host",
   "MONGO_DB_CONNECT": "mongodb://localhost/mytttapp",
   "SERVER_ADDRESS": "http://localhost:3100",

@@ -12,6 +12,9 @@ ThereThenThat enables searching through time, space, and/or keyword.  Collection
 
 It has elenents of Imgur, or Flickr, or a Blog...
 
+### Features
+
+* Search for collections by Location, Time, and/or Tags
 * Drag and Drop links to web pages...
 * Drag and Drop image, audio(mp3), and video(mp4) files into it...
 * Paste screen captures...
@@ -21,6 +24,9 @@ It has elenents of Imgur, or Flickr, or a Blog...
 Users start a collection that expresses some “where, when, what”, and fill it with references and media that relate to that.  Think of something such as:
 
 _"New York City, November 2017, CentralPark, Parade"_
+
+
+A simpler form of this project is my work on [SnapperStore](https://github.com/DanielSmith/snapperstore) -- it sticks to tags for individual  items, and groups items by date uploaded.
 
 ## Build Setup
 
@@ -45,20 +51,6 @@ ThereThenThat
 │   └── models
 └── common
 
-
-
-
-ThereThenThat
-├── ThereThenThat-client
-│   ├── build
-│   ├── config
-│   ├── src
-│   ├── static
-│   └── test
-├── ThereThenThat-server
-│   ├── models
-│   └── public
-└── common
 ```
 
 ### A few notes on dependencies:
@@ -73,6 +65,21 @@ Open up two shells - one for server, one for client.
 ### Server Side
 ``` bash
 cd ThereThenThat-server
+```
+
+
+The configuration for the server is kept in config.json:
+
+```
+{
+  "MONGO_DB_HOST": "mongo host",
+  "MONGO_DB_CONNECT": "mongodb://localhost/mytttapp",
+  "SERVER_ADDRESS": "http://localhost:3100",
+  "SERVER_PORT": "3100",
+  "CLIENT_ADDRESS": "http://localhost:8080"
+}
+```
+
 
 # install dependencies
 npm install
