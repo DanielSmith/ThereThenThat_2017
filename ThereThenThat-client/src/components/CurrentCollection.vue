@@ -232,7 +232,6 @@ export default {
         event.dataTransfer.types.map(curType => {
           if (curType === 'text/plain') {
             let link = event.dataTransfer.getData('Text');
-            console.log(`we see ${src}`);
 
             const container = this.curCollectionList._id;
             const address = this.curCollectionList.address;
