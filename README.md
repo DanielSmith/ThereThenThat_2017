@@ -12,6 +12,11 @@ ThereThenThat enables searching through time, space, and/or keyword.  Collection
 
 It has elenents of Imgur, or Flickr, or a Blog...
 
+Historical Note:
+I originally wrote this idea up in 2003-2005:
+* https://web.archive.org/web/20030418025743/http://thereandthen.org:80/
+* https://web.archive.org/web/20050403204849/http://thereandthen.org:80/
+
 ### Features
 
 * Search for collections by Location, Time, and/or Tags
@@ -137,7 +142,7 @@ npm run dev
 
 Once the client and server sides are running, you will see a mostly empty page at http://localhost:8080/
 
-Create a collection by clicking in any of the text fields up at the top of the page: Location, Time, or Tags.  You can change any of the fields, and then press the "Create" button to create a collection.  From that point, you are taken to your new collection (which will be empty).  You can now add links or media to that collection:
+Create a collection by clicking in any of the text fields up at the top of the page: Location, Time, or Tags.  You can change any of the fields, and then press the "Create" button to create a collection.  From that point, you are taken to your new collection +(which will be empty).  You can now add links or media to that collection:
 
 
 
