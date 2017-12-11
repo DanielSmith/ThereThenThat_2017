@@ -142,9 +142,7 @@ npm run dev
 
 Once the client and server sides are running, you will see a mostly empty page at http://localhost:8080/
 
-Create a collection by clicking in any of the text fields up at the top of the page: Location, Time, or Tags.  You can change any of the fields, and then press the "Create" button to create a collection.  From that point, you are taken to your new collection +(which will be empty).  You can now add links or media to that collection:
-
-
+Create a collection by clicking in any of the text fields up at the top of the page: Location, Time, or Tags.  You can change any of the fields, and then press the "Create" button to create a collection.  From that point, you are taken to your new collection +(which will be empty).  You can now add links or media to that collection.  Try to drag and drop an image from your local machine. [need to make this render with the tag functionality right away.. for now, refresh the page]
 
 ### Tags
 
@@ -157,8 +155,6 @@ Clicking on the pencil button for any item will allow you to add and remove tags
 
 
 ## Some Notes
-
-### Article: 
 
 ### Article: Deploy on Digital Ocean
 
