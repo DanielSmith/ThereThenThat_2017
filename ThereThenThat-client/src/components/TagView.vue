@@ -47,7 +47,7 @@
                   <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
                 </v-flex>
                 <v-flex xs4>
-                  <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
+                  <!-- <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4> -->
 
                   <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
                 </v-flex>
@@ -426,7 +426,6 @@ export default {
       let apiPath = `${this.$config.SERVER}${this.$config.SERVER_PORT}/api/synctags`,              
         dbArgs = { id: id, tagquery: tags };
 
-      console.log( apiPath );
       const config = { headers: { 'Content-Type': 'application/json' } };
 
       axios.post(apiPath, dbArgs, config)
@@ -450,6 +449,6 @@ img, audio, video {
 }
 
 .mediaBox {
-  border: solid 1px red;
+/*  border: solid 1px red; */
 }
 </style>
