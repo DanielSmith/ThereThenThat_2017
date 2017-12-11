@@ -10,7 +10,7 @@ ThereThenThat is like a scrapbook for media and links.
 
 ThereThenThat enables searching through time, space, and/or keyword.  Collections can be easily shared in a consistently formatted link.
 
-It has elenents of Imgur, or Flickr, or a Blog...
+It has elements of Imgur, or Flickr, or a Blog...
 
 Historical Note:
 I originally wrote this idea up in 2003-2005:
