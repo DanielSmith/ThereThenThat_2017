@@ -240,14 +240,13 @@ export default {
         event.dataTransfer.types.map(curType => {
           if (curType === 'text/plain') {
             let link = event.dataTransfer.getData('Text');
-            console.log(`we see ${src}`);
 
             const container = this.curCollectionList._id;
             const address = this.curCollectionList.address;
 
             let mynow = Date.now();
 
-            axios.post(`http://localhost:3100/api/addlink`, {  link, container })
+            axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/addlink`, {  link, container })
               .then(response => {
                   let newLink = {
                     _id: response.data._id,
