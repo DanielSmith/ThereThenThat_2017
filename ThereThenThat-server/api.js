@@ -109,6 +109,7 @@ router.post("/create", function (req, res, next) {
   
             returnObj = {};
             returnObj.status = 'ok';
+            returnObj.address = address;
             
             // errors on this...
             res.writeHead(200, {"Content-Type": "application/json"});

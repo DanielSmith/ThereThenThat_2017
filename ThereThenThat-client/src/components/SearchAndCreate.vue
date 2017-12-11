@@ -458,16 +458,9 @@ export default {
         description: "test",
       })
       .then(response => {
-        console.log(response);
-        
-        // tell the router to go home...
-        // this is temporary.. kinda brute force...
-        // what really should happen is to tell the main collection list
-        // to update... 
-        // although.. this does bring up the question as to what we
-        // should do when creating a collection from another...
-        // perhaps we should go directly to the new collection in all cases?
-        this.$router.go('/')
+        // do some checking on this...
+        const newAddress = `${response.data.address}`;      
+        this.$router.push(newAddress);
       })
       .catch(err => {
         console.log(err);
