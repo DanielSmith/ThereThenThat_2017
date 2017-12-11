@@ -122,6 +122,8 @@ src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&libraries=p
 </script>
 ```
 
+For more information on how to get a Google Maps API key, go to: https://developers.google.com/maps/documentation/javascript/get-api-key
+
 ```
 # install dependencies
 npm install
@@ -133,8 +135,10 @@ npm run dev
 
 ### Getting Started
 
-(grab notes from SnapperStore)
 Once the client and server sides are running, you will see a mostly empty page at http://localhost:8080/
+
+Create a collection by clicking in any of the text fields up at the top of the page: Location, Time, or Tags.  You can change any of the fields, and then press the "Create" button to create a collection.  From that point, you are taken to your new collection (which will be empty).  You can now add links or media to that collection:
+
 
 
 ### Tags

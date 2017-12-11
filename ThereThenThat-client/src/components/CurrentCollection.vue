@@ -40,7 +40,7 @@
                 <v-layout row wrap>
                   <v-flex xs7 class="mediaBox">
 
-                    <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
+                    <component :itemPath="getCurMedia(curItem.data)" :allData="curItem" key="curKey++" v-bind:is="curItem.componentType">
                     </component>
 
 
@@ -318,6 +318,7 @@ export default {
       })
     },
 
+
     doUpload(uploadFile, extension = "png") {
       const uploadData = new FormData();
       uploadData.append('thefile', uploadFile);
@@ -339,9 +340,15 @@ export default {
         });
     },
 
+
     doDrop: function(event) {
       event.preventDefault();
-      this.doDroppedFiles(event);
+
+      if ([...event.dataTransfer.types].includes('text/plain')) {
+        this.doDroppedLink(event)
+      } else {
+        this.doDroppedFiles(event);
+      }
     },
 
     createImage: function(source) {
