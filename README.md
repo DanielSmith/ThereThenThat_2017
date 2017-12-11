@@ -33,7 +33,7 @@ A simpler form of this project is my work on [SnapperStore](https://github.com/D
 After cloning the repository, you will see this top level directory structure:
 
 
-``` bash
+```
 ThereThenThat
 ├── ThereThenThat-client
 │   ├── build
@@ -56,7 +56,7 @@ ThereThenThat
 
 
 ### Server Side
-``` bash
+```
 cd ThereThenThat-server
 ```
 
@@ -73,7 +73,7 @@ The configuration for the server is kept in config.json:
 }
 ```
 
-These defaults should be fine for a local development environment.
+These defaults should be fine for a local development environment.  If you want to change the default collection name (from "nytttapp"), do so in MONGO_DB_CONNECT.
 
 ``` bash
 # install dependencies
@@ -99,7 +99,7 @@ build environment:
 
 ### Client Side
 
-``` bash
+```
 cd ThereThenThat-client
 ```
 
@@ -114,8 +114,15 @@ const configs = {
 }
 ```
 
+You will need your own Google API key to use Google Maps.  In index.html, Change "YOUR_GOOGLE_API_KEY" to your key:
 
-``` bash
+```
+<script async defer type="text/javascript"
+src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&libraries=places">
+</script>
+```
+
+```
 # install dependencies
 npm install
 
@@ -127,6 +134,17 @@ npm run dev
 ### Getting Started
 
 (grab notes from SnapperStore)
+Once the client and server sides are running, you will see a mostly empty page at http://localhost:8080/
+
+
+### Tags
+
+Tags can be used to direct search (find all items with same tag)
+
+**Editing Tags**
+
+Clicking on the pencil button for any item will allow you to add and remove tags.
+
 
 
 ## Some Notes
