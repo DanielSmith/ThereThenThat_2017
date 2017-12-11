@@ -8,78 +8,76 @@
 
     <TTTHeader></TTTHeader>
 
-    <!-- <main> -->
-      <SearchAndCreate></SearchAndCreate>
-      <v-container fluid>
-        <v-layout row v-for="curItem in this.pastedList" key="curKey++">
-          <v-flex xs8 class="mediaBox">
-            <v-card flat pb-5>
-              <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
-              </component>
-            </v-card>
+    <SearchAndCreate></SearchAndCreate>
+    <v-container fluid>
+      <v-layout row v-for="curItem in this.pastedList" key="curKey++">
+        <v-flex xs8 class="mediaBox">
+          <v-card flat pb-5>
+            <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
+            </component>
+          </v-card>
+          <v-spacer></v-spacer>
+        </v-flex>
+      </v-layout>
+
+      <v-layout row v-for="curItem in this.addedList" key="curKey++">
+        <v-flex xs12>
+          <v-card flat pb-5>
+
+            <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="curItem.componentType">
+            </component>
             <v-spacer></v-spacer>
-          </v-flex>
-        </v-layout>
 
-        <v-layout row v-for="curItem in this.addedList" key="curKey++">
-          <v-flex xs12>
-            <v-card flat pb-5>
-
-              <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="curItem.componentType">
-              </component>
-              <v-spacer></v-spacer>
-
-            </v-card>
-          </v-flex>
-        </v-layout>
+          </v-card>
+        </v-flex>
+      </v-layout>
 
 
-        <v-layout row wrap>
-          <v-flex xs12>
-            <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
-              <v-container fluid grid-list-lg>
-                <v-layout row wrap>
-                  <v-flex xs7 class="mediaBox">
+      <v-layout row wrap>
+        <v-flex xs12>
+          <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
+            <v-container fluid grid-list-lg>
+              <v-layout row wrap>
+                <v-flex xs7 class="mediaBox">
 
-                    <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
-                    </component>
+                  <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
+                  </component>
 
 
-                    <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
-                  </v-flex>
-                  <v-flex xs4>
-                    <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
+                  <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
+                </v-flex>
+                <v-flex xs4>
+                  <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
 
-                    <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
-                  </v-flex>
+                  <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
+                </v-flex>
 
-                  <v-form v-if="showEditTags[curItem.data._id]" ref="form">
-                    <v-layout pl-5 row>
-                      <v-flex xs4>
-                        <v-text-field
-                        label="Enter new tags"
-                        v-model="allTagEdits[curItem.data._id]"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs4>
-                        <v-btn @click="submitTags(curItem.data._id)">Add Tags</v-btn>
-                      </v-flex>
-                    </v-layout>
-                  </v-form>
-                  <v-btn  v-for="curTag in allTags[curItem.data._id]" key="curKey++"
-                    @click="chooseTag(curItem.data._id, curTag)"
-                    >
-                    <strong> {{ curTag }} </strong> 
-                    <span class="showEditTag" v-if="showEditTags[curItem.data._id]"> X  </span>
-                  </v-btn>
+                <v-form v-if="showEditTags[curItem.data._id]" ref="form">
+                  <v-layout pl-5 row>
+                    <v-flex xs4>
+                      <v-text-field
+                      label="Enter new tags"
+                      v-model="allTagEdits[curItem.data._id]"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs4>
+                      <v-btn @click="submitTags(curItem.data._id)">Add Tags</v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-form>
+                <v-btn  v-for="curTag in allTags[curItem.data._id]" key="curKey++"
+                  @click="chooseTag(curItem.data._id, curTag)"
+                  >
+                  <strong> {{ curTag }} </strong> 
+                  <span class="showEditTag" v-if="showEditTags[curItem.data._id]"> X  </span>
+                </v-btn>
 
-                </v-layout>
-              </v-container>
-            </v-card>
-          </v-flex>
-        </v-layout>        
-      </v-container>
-    <!-- </main> -->
+              </v-layout>
+            </v-container>
+          </v-card>
+        </v-flex>
+      </v-layout>        
+    </v-container>
   </v-app>
 </template>
 
@@ -138,8 +136,6 @@ export default {
   methods: {
     // call server for JSON data
     getTagView(tag = '') {
-
-      console.log('make a call to search tags....');
 
       if (tag === '') {
         tag  = this.$route.params.tags;
@@ -281,8 +277,6 @@ export default {
             canvas.height = curImage.height;
             ctx.drawImage(curImage, 0, 0);
 
-            // this.imageList.unshift(curImage);
-
             fetch(canvas.toDataURL('image/png'))
               .then(res => res.blob())
               .then(blob => {
@@ -356,11 +350,7 @@ export default {
     createImage: function(source) {
       let pastedImage = new Image();
       pastedImage.onload = function() {
-
-        // console.dir(pastedImage);
-        // let height = pastedImage.height;
-        // let width = pastedImage.width;
-        // let length = pastedImage.length;
+        //
       }
       pastedImage.src = source;
       this.pastedList.unshift(pastedImage.src);
@@ -394,7 +384,6 @@ export default {
     submitTags(id) {
       
       // rewrite this.. the empty and null cases can cause problems
-      console.log(this.allTags);
       // am also being careful not to send an empty tag
       let tAry = (this.allTagEdits[id]).split(/ +/);
       tAry = tAry.filter(val => val !== '');
@@ -402,7 +391,6 @@ export default {
       if (tAry.length === 0) { tAry = ['']; }
       if (this.allTags[id] === null) { this.allTags[id] = []; }
 
-      console.log(` for ${id}......asfter............`);
       const newTagsAr = [...this.allTags[id], ...tAry].sort();
       let newTags = [...new Set(newTagsAr)];
       newTags = newTags.filter(val => val !== '');

@@ -7,12 +7,10 @@
   >
 
     <TTTHeader></TTTHeader>
-
-  <v-content>
+    <v-content>
       <SearchAndCreate></SearchAndCreate>
 
       <v-container fluid>
-
         <v-layout row wrap>
           <v-flex xs12>
             <v-card flat pb-5 v-for="item in mainList" :key="item._id">

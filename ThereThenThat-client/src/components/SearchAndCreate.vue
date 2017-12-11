@@ -139,7 +139,6 @@ export default {
   computed: {
    ...mapGetters({
       addressFromMap: 'getMyAddress',
-      // addressUpdated: 'getMyAddressUpdate',
       latLngUpdated: 'getMyLatLng',
       dateTimeFromPicker: 'getMyDateTime',
       dateISO: 'getMyISODate',
@@ -293,7 +292,6 @@ export default {
     },
 
     doClearLocation() {
-      console.log('called doClear...');
       this.theLocation = '';
     },
 
@@ -329,9 +327,6 @@ export default {
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
         }
-
-
-        console.log('need to update the location... ');
 
         this.theLocation = place.formatted_address;
         this.$store.commit('autocompletePlace', place);

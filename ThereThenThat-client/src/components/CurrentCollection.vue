@@ -7,79 +7,72 @@
     @paste.native="onPaste($event)">
 
     <TTTHeader></TTTHeader>
+    <SearchAndCreate></SearchAndCreate>
+    <v-container fluid>
+      <v-layout row v-for="curItem in this.pastedList" key="curKey++">
+        <v-flex xs8 class="mediaBox">
+          <v-card flat pb-5>
+            <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
+            </component>
+          </v-card>
+          <v-spacer></v-spacer>
+        </v-flex>
+      </v-layout>
 
-    <!-- <main> -->
-      <!-- <SearchAndCreate></SearchAndCreate> -->
-      <v-container fluid>
-        <v-layout row v-for="curItem in this.pastedList" key="curKey++">
-          <v-flex xs8 class="mediaBox">
-            <v-card flat pb-5>
-              <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
-              </component>
-            </v-card>
+      <v-layout row v-for="curItem in this.addedList" key="curKey++">
+        <v-flex xs12>
+          <v-card flat pb-5>
+
+            <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="curItem.componentType">
+            </component>
             <v-spacer></v-spacer>
-          </v-flex>
-        </v-layout>
 
-        <v-layout row v-for="curItem in this.addedList" key="curKey++">
-          <v-flex xs12>
-            <v-card flat pb-5>
+          </v-card>
+        </v-flex>
+      </v-layout>
 
-              <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="curItem.componentType">
-              </component>
-              <v-spacer></v-spacer>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
+            <v-container fluid grid-list-lg>
+              <v-layout row wrap>
+                <v-flex xs7 class="mediaBox">
 
-            </v-card>
-          </v-flex>
-        </v-layout>
+                  <component :itemPath="getCurMedia(curItem.data)" :allData="curItem" key="curKey++" v-bind:is="curItem.componentType">
+                  </component>
 
-        <v-layout row wrap>
-          <v-flex xs12>
-            <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
-              <v-container fluid grid-list-lg>
-                <v-layout row wrap>
-                  <v-flex xs7 class="mediaBox">
+                </v-flex>
+                <v-flex xs4>
+                  <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
 
-                    <component :itemPath="getCurMedia(curItem.data)" :allData="curItem" key="curKey++" v-bind:is="curItem.componentType">
-                    </component>
+                  <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
+                </v-flex>
 
-
-                    <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
-                  </v-flex>
-                  <v-flex xs4>
-                    <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4>
-
-                    <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
-                  </v-flex>
-
-                  <v-form v-if="showEditTags[curItem.data._id]" ref="form">
-                    <v-layout pl-5 row>
-                      <v-flex xs4>
-                        <v-text-field
-                        label="Enter new tags"
-                        v-model="allTagEdits[curItem.data._id]"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs4>
-                        <v-btn @click="submitTags(curItem.data._id)">Add Tags</v-btn>
-                      </v-flex>
-                    </v-layout>
-                  </v-form>
-                  <v-btn  v-for="curTag in allTags[curItem.data._id]" key="curKey++"
-                    @click="chooseTag(curItem.data._id, curTag)"
-                    >
-                    <strong> {{ curTag }} </strong> 
-                    <span class="showEditTag" v-if="showEditTags[curItem.data._id]"> X  </span>
-                  </v-btn>
-
-
-                </v-layout>
-              </v-container>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    <!-- </main> -->
+                <v-form v-if="showEditTags[curItem.data._id]" ref="form">
+                  <v-layout pl-5 row>
+                    <v-flex xs4>
+                      <v-text-field
+                      label="Enter new tags"
+                      v-model="allTagEdits[curItem.data._id]"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs4>
+                      <v-btn @click="submitTags(curItem.data._id)">Add Tags</v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-form>
+                <v-btn  v-for="curTag in allTags[curItem.data._id]" key="curKey++"
+                  @click="chooseTag(curItem.data._id, curTag)"
+                  >
+                  <strong> {{ curTag }} </strong> 
+                  <span class="showEditTag" v-if="showEditTags[curItem.data._id]"> X  </span>
+                </v-btn>
+              </v-layout>
+            </v-container>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-app>
 </template>
 
@@ -108,7 +101,6 @@ export default {
   
   data() {
     return {
-
       currentView: 'videoComponent',
 
       itemList: [],
@@ -134,15 +126,10 @@ export default {
     getSingleCollection() {
 
       const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}${this.$route.path}`;
-      // const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}/34,34/time`;
 
-// alert(path);
       fetch(path)
         .then(response => response.json())
         .then(response => {
-
-          console.dir(response);
-
 
           this.curCollectionList = response;
           this.curCollectionList.renderLinks = [];
@@ -150,7 +137,6 @@ export default {
             let newObj = {};
 
             newObj.data = cur;
-            console.log('cur is... ');
             newObj.componentType = mimeUtils.getItemType(cur.fileName)
             console.log(newObj);
             newObj.tags = cur.tags || [];
@@ -159,9 +145,6 @@ export default {
             this.$set(this.showEditTags, newObj.id, false);
             this.$set(this.allTagEdits, newObj.id, '');
             this.$set(this.allTags, newObj.id, newObj.tags);
-
-            console.dir(newObj);
-
             this.curCollectionList.renderLinks.push(newObj);
           });
         })        
@@ -185,6 +168,8 @@ export default {
           return document.createElement('video');
           break;
 
+        // do something for text too?
+
         default:
           return ''; // what to use for this...?
           break;
@@ -199,7 +184,6 @@ export default {
       let imageItem = items[0];
       let imageFile = imageItem.getAsFile();
       const container = this.curCollectionList._id;
-
 
       if (imageItem.kind === 'file') {
         let reader = new FileReader();
@@ -238,7 +222,8 @@ export default {
 
             let mynow = Date.now();
 
-            axios.post(`http://localhost:3100/api/addlink`, {  link, container })
+            axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/addlink`, { 
+               link, container })
               .then(response => {
                   let newLink = {
                     _id: response.data._id,
@@ -267,8 +252,6 @@ export default {
             canvas.width = curImage.width;
             canvas.height = curImage.height;
             ctx.drawImage(curImage, 0, 0);
-
-            // this.imageList.unshift(curImage);
 
             fetch(canvas.toDataURL('image/png'))
               .then(res => res.blob())
@@ -353,11 +336,7 @@ export default {
     createImage: function(source) {
       let pastedImage = new Image();
       pastedImage.onload = function() {
-
-        // console.dir(pastedImage);
-        // let height = pastedImage.height;
-        // let width = pastedImage.width;
-        // let length = pastedImage.length;
+        //
       }
       pastedImage.src = source;
       this.pastedList.unshift(pastedImage.src);
@@ -399,7 +378,6 @@ export default {
       if (tAry.length === 0) { tAry = ['']; }
       if (this.allTags[id] === null) { this.allTags[id] = []; }
 
-      console.log(` for ${id}......asfter............`);
       const newTagsAr = [...this.allTags[id], ...tAry].sort();
       let newTags = [...new Set(newTagsAr)];
       newTags = newTags.filter(val => val !== '');
@@ -418,10 +396,8 @@ export default {
         this.syncTags(id);
       } else {
         tag = tag.trim();
-
         // this pushes over to TagView
         this.$router.push({ name: 'TagView', params: { tags: tag }})
-
       }
     },
 
@@ -430,11 +406,9 @@ export default {
 
       const tags = this.allTags[id];
 
-      console.log(tags);
       let apiPath = `${this.$config.SERVER}${this.$config.SERVER_PORT}/api/synctags`,              
         dbArgs = { id: id, tagquery: tags };
 
-      console.log( apiPath );
       const config = { headers: { 'Content-Type': 'application/json' } };
 
       axios.post(apiPath, dbArgs, config)
@@ -445,7 +419,6 @@ export default {
           console.log(err);
         });
     }
-
   }
 }
 </script>
@@ -458,6 +431,6 @@ img, audio, video {
 }
 
 .mediaBox {
-  border: solid 1px red;
+  /* border: solid 1px red; */
 }
 </style>
