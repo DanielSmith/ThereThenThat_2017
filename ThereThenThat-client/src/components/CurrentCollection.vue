@@ -33,7 +33,7 @@
 
       <v-layout row wrap>
         <v-flex xs12>
-          <v-card v-if="this.numItems === 0" :key="needMedia">
+          <v-card v-if="this.numItems === 0">
             <v-container fluid grid-list-lg>
               <v-layout row wrap>
                 <v-flex xs7>
@@ -217,7 +217,6 @@ export default {
           myImage.onload = () => {
             // this.doUpload(myImage);
           }
-
         };
         reader.readAsDataURL(imageFile);
         this.doUpload(imageFile);
