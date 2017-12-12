@@ -1,4 +1,5 @@
 # ThereThenThat
+Alpha 1, December 2017
 
 ![ThereThenThat Logo](ThereThenThat-client/static/ttt-logo-small.png)
 
@@ -151,7 +152,6 @@ Tags can be used to direct search (find all items with same tag)
 **Editing Tags**
 
 Clicking on the pencil button for any item will allow you to add and remove tags.
-
 
 
 ## Some Notes

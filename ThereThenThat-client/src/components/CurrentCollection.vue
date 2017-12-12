@@ -6,8 +6,8 @@
     @dragend.native="dragEnd"
     @paste.native="onPaste($event)">
 
-    <TTTHeader></TTTHeader>
-    <SearchAndCreate></SearchAndCreate>
+    <TTTHeader :context="this.headerTitle"></TTTHeader>
+    <!-- <SearchAndCreate></SearchAndCreate> -->
     <v-container fluid>
       <v-layout row v-for="curItem in this.pastedList" key="curKey++">
         <v-flex xs8 class="mediaBox">
@@ -33,6 +33,16 @@
 
       <v-layout row wrap>
         <v-flex xs12>
+          <v-card v-if="this.numItems === 0" :key="needMedia">
+            <v-container fluid grid-list-lg>
+              <v-layout row wrap>
+                <v-flex xs7>
+
+                    <p>Drag media items here...</p>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card>
           <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
             <v-container fluid grid-list-lg>
               <v-layout row wrap>
@@ -112,7 +122,10 @@ export default {
       showEditTags: {},
 
       curCollectionList: [],
-      imageList: []
+      imageList: [],
+      numItems: 0,
+
+      headerTitle: 'fetching collection...'
     }
   },
 
@@ -126,15 +139,18 @@ export default {
     getSingleCollection() {
 
       const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}${this.$route.path}`;
+      this.numItems = 0;
 
       fetch(path)
         .then(response => response.json())
         .then(response => {
 
+          this.headerTitle = response.title;
           this.curCollectionList = response;
           this.curCollectionList.renderLinks = [];
           this.curCollectionList.links.map(cur => {
             let newObj = {};
+            this.numItems++;
 
             newObj.data = cur;
             newObj.componentType = mimeUtils.getItemType(cur.fileName)
@@ -320,6 +336,8 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+
+      this.numItems++;
     },
 
 

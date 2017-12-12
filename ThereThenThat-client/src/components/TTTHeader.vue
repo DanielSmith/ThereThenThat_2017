@@ -1,6 +1,6 @@
 <template>
   <v-toolbar class="indigo darken-4" app dark>
-    <v-toolbar-title><a href="/">ThereThenThat</a></v-toolbar-title>
+    <v-toolbar-title><a href="/">ThereThenThat</a><span class="titlePad"></span> {{ context }} </v-toolbar-title>
     <v-spacer></v-spacer>
 
   </v-toolbar>
@@ -8,7 +8,8 @@
 
 <script>
 export default {
-  name: 'TTTHeader'
+  name: 'TTTHeader',
+  props: ['context'] 
 }
 </script>
 
@@ -16,5 +17,10 @@ export default {
 a {
   text-decoration: none;
   color: #ffffff;
+}
+
+.titlePad {
+  display: inline-block;
+  width: 30px;
 }
 </style>

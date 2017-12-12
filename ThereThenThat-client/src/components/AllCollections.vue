@@ -6,7 +6,7 @@
     @dragend.native="dragEnd"  
   >
 
-    <TTTHeader></TTTHeader>
+    <TTTHeader context="All Collections"></TTTHeader>
     <v-content>
       <SearchAndCreate></SearchAndCreate>
 
