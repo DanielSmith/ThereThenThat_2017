@@ -256,8 +256,9 @@ function validateTime(time = '') {
   // ok, lets see what we really have...
   const cleanDate = time.replace(' - ', ' ');
   const timeElems = cleanDate.split(' ');
-  const hours = datefns.format(`${timeElems[0]} ${timeElems[1]}`);
-  time = hours;
+  // const hours = datefns.format(`${timeElems[0]} ${timeElems[1]}`);
+  // time = hours;
+  time = timeElems[0];
 
   if (!validator.isISO8601(time))  {
     timeParams.error.push(STATUS_TIME_ERR);
