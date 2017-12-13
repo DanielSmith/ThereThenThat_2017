@@ -375,8 +375,7 @@ export default {
     searchClick() {
 
       const config = { headers: { 'Content-Type': 'application/json' } };
-
-      axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/search`, {
+      axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/seach`, { 
         location: this.theLocation,
         time: this.theDateTime,
         tags: this.theTags
@@ -440,7 +439,7 @@ export default {
       }
 
       // needs location and time..
-      axios.post(`http://${this.SERVER_HOST}:${this.SERVER_PORT}/api/create`, {
+      axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/create`, { 
         location: this.theLocation,
         address: this.theAddress,
         lat: this.lat,
