@@ -120,7 +120,7 @@ const configs = {
 }
 ```
 
-You will need your own Google API key to use Google Maps.  In index.html, Change "YOUR_GOOGLE_API_KEY" to your key:
+You will need your own Google API key to use Google Maps.  In index.html, Change "YOUR_GOOGLE_MAPS_API_KEY" to your key:
 
 ```
 <script async defer type="text/javascript"
