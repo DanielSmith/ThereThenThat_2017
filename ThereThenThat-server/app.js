@@ -41,6 +41,11 @@ app.all('/*', function (req, res, next) {
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
   res.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
   res.header("Access-Control-Expose-Headers", "x-flashmessages");
+
+
+  res.header("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+  res.header("Pragma", "no-cache"); // HTTP 1.0.
+  res.header("Expires", "0"); // Proxies.
   next();
 });
 
