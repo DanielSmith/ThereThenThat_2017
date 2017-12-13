@@ -1,5 +1,5 @@
 # ThereThenThat
-Alpha 1, December 2017
+Alpha 1 (Arabica Bean) - December 13, 2017
 
 ![ThereThenThat Logo](ThereThenThat-client/static/ttt-logo-small.png)
 
@@ -158,7 +158,7 @@ Clicking on the pencil button for any item will allow you to add and remove tags
 
 ### Article: Deploy on Digital Ocean
 
-See this TK article for a walkthrough of setting up ThereThenThat on Digital Ocean. Use my referral code for a discount on setting up a Digital Ocean account:  https://m.do.co/c/c295876bd25b
+(this is on hold until a couple of bugs are addressed)
 
 ### Repo & Article: SnapperStore on Digital Ocean
 
