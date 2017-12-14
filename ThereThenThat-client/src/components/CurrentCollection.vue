@@ -53,8 +53,6 @@
 
                 </v-flex>
                 <v-flex xs4>
-                  <!-- <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4> -->
-
                   <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
                 </v-flex>
 
@@ -307,7 +305,7 @@ export default {
           droppedItem.src = reader.result;
           this.addedList.push(newObj);
 
-          // this.curCollectionList.renderLinks.push(newObj);
+          this.curCollectionList.renderLinks.push(newObj);
         }
 
         reader.readAsDataURL(curFile);

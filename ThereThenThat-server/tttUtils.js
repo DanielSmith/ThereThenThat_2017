@@ -183,9 +183,6 @@ function doValidations(params) {
 
 function validateLocation(location = '_') {
 
-  console.log(`in valid...    ${location}`);
-
-
   // console.log(`validateLocation  with ${location}`);
 
   // we return an object - easier to do fine grained searches later
@@ -391,9 +388,6 @@ function validateDescription(description) {
 
 
 function makeAddress(validations) {
-
-
-  console.log(validations);
   const location = validations.location || '_';
   const time = validations.time || '_';
   const people = validations.people || '';

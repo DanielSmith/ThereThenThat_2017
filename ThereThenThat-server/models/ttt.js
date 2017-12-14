@@ -88,6 +88,11 @@ const linkSchema = new Schema({
   description: String,
   extension: String,
 
+  // we generate an ID on the client side, as soon as an item
+  // is pasted or dropped.. that gives us a way to handle
+  // tagging before we actually know the ObjectId of this link
+  clientId: String,
+
   entryType: { type: String, default: "url" },
   timeSaved: { type: Date, default: Date.now },
   
