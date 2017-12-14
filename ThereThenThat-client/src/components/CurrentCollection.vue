@@ -43,7 +43,7 @@
               </v-layout>
             </v-container>
           </v-card>
-          <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
+          <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data.clientId">
             <v-container fluid grid-list-lg>
               <v-layout row wrap>
                 <v-flex xs7 class="mediaBox">
@@ -56,24 +56,24 @@
                   <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
                 </v-flex>
 
-                <v-form v-if="showEditTags[curItem.data._id]" ref="form">
+                <v-form v-if="showEditTags[curItem.data.clientId]" ref="form">
                   <v-layout pl-5 row>
                     <v-flex xs4>
                       <v-text-field
                       label="Enter new tags"
-                      v-model="allTagEdits[curItem.data._id]"
+                      v-model="allTagEdits[curItem.data.clientId]"
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs4>
-                      <v-btn @click="submitTags(curItem.data._id)">Add Tags</v-btn>
+                      <v-btn @click="submitTags(curItem.data.clientId)">Add Tags</v-btn>
                     </v-flex>
                   </v-layout>
                 </v-form>
-                <v-btn  v-for="curTag in allTags[curItem.data._id]" key="curKey++"
-                  @click="chooseTag(curItem.data._id, curTag)"
+                <v-btn  v-for="curTag in allTags[curItem.data.clientId]" key="curKey++"
+                  @click="chooseTag(curItem.data.clientId, curTag)"
                   >
                   <strong> {{ curTag }} </strong> 
-                  <span class="showEditTag" v-if="showEditTags[curItem.data._id]"> X  </span>
+                  <span class="showEditTag" v-if="showEditTags[curItem.data.clientId]"> X  </span>
                 </v-btn>
               </v-layout>
             </v-container>
@@ -162,7 +162,7 @@ export default {
             newObj.componentType = mimeUtils.getItemType(cur.fileName)
             console.log(newObj);
             newObj.tags = cur.tags || [];
-            newObj.id = cur._id;
+            newObj.id = cur.clientId;
 
             this.$set(this.showEditTags, newObj.id, false);
             this.$set(this.allTagEdits, newObj.id, '');
@@ -249,6 +249,7 @@ export default {
                link, container })
               .then(response => {
                   let newLink = {
+                    // may need to add clientId here...
                     _id: response.data._id,
                     url: response.data.url,
                     title: response.data.title,
@@ -296,7 +297,6 @@ export default {
     doDroppedFiles: function(event) {
       let theFiles = Array.from(event.dataTransfer.files);
       let myImageList = this.imageList;
-
 
       theFiles.map(curFile => {
         // get file type
@@ -442,7 +442,7 @@ export default {
       const tags = this.allTags[id];
 
       let apiPath = `${this.$config.SERVER}${this.$config.SERVER_PORT}/api/synctags`,              
-        dbArgs = { id: id, tagquery: tags };
+        dbArgs = { clientId: id, tagquery: tags };
 
       const config = { headers: { 'Content-Type': 'application/json' } };
 

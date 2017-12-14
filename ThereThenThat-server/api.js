@@ -1,3 +1,4 @@
+
 /*
 **  api.js
 */
@@ -220,14 +221,14 @@ router.post('/synctags', function(req, res, next) {
     return;
   }
 
-  const id = req.body.id;
+  
+  const query = {'clientId': req.body.clientId };
   const tags = req.body.tagquery;
   const updateTags = {
     tags: tags
   };
 
-
-  Link.findByIdAndUpdate(id, { $set: updateTags }, function(err, result) {
+  Link.findOneAndUpdate(query, { $set: updateTags }, function(err, result) {
     if(err){
       console.log(err);
     }
