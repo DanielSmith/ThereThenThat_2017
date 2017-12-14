@@ -244,8 +244,8 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
   const title = req.body.title;
   const description = req.body.description;
   const extension = req.body.extension;
+  const clientId = req.body.clientId;
   
-
   const pathToUse = req.file.path.replace('public', '') || 'none';
   console.log(req.file);
   // tell the DB about it...
@@ -255,6 +255,7 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
     title: title,
     description: description,
     entryType: "image",
+    clientId: clientId,
     
     extension: extension,
     originalname: req.file.originalname,

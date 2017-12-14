@@ -88,6 +88,7 @@
 import TTTHeader from '@/components/TTTHeader';
 import SearchAndCreate from '@/components/SearchAndCreate';
 import axios from 'axios';
+import uuidv4 from 'uuid/v4';
 
 import audioComponent from './Audio';
 import videoComponent from './Video';
@@ -133,9 +134,16 @@ export default {
 
 
   methods: {
+
+    newUUID() {
+      const curUUID = uuidv4();
+      // console.log(curUUID);
+
+      return curUUID;
+    },
+
     // call server for JSON data
     getSingleCollection() {
-
       const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}${this.$route.path}`;
       this.numItems = 0;
 
@@ -193,6 +201,7 @@ export default {
     onPaste(event) {
       let index = 0;
       let items = (event.clipboardData || event.originalEvent.clipboardData).items;
+      const clientId = this.newUUID();
 
       // do a check here to see if it is an image...
       let imageItem = items[0];
@@ -217,7 +226,7 @@ export default {
           }
         };
         reader.readAsDataURL(imageFile);
-        this.doUpload(imageFile);
+        this.doUpload(imageFile, clientId);
       }
     },
 
@@ -232,6 +241,7 @@ export default {
 
             const container = this.curCollectionList._id;
             const address = this.curCollectionList.address;
+            const clientId = this.newUUID();
 
             let mynow = Date.now();
 
@@ -242,7 +252,8 @@ export default {
                     _id: response.data._id,
                     url: response.data.url,
                     title: response.data.title,
-                    description: response.data.description
+                    description: response.data.description,
+                    clientId: clientId
                   }
 
                   this.curCollectionList.links.push(newLink);
@@ -260,6 +271,7 @@ export default {
           let curImage = new Image();
           let canvas = document.createElement('canvas');
           let ctx = canvas.getContext('2d');
+          const clientId = this.newUUID();
 
           curImage.onload = () => {
             canvas.width = curImage.width;
@@ -269,12 +281,14 @@ export default {
             fetch(canvas.toDataURL('image/png'))
               .then(res => res.blob())
               .then(blob => {
-                this.doUpload(blob);
+                this.doUpload(blob, clientId);
               })
           }
 
         curImage.setAttribute('crossOrigin', 'anonymous');
         curImage.src = src;
+
+        // dont user imagelist any more...
         this.imageList.unshift(curImage.src);
       }
     },
@@ -283,9 +297,11 @@ export default {
       let theFiles = Array.from(event.dataTransfer.files);
       let myImageList = this.imageList;
 
+
       theFiles.map(curFile => {
         // get file type
         let curFileData = mimeUtils.getData(curFile);
+        const clientId = this.newUUID();
 
         // am sure this should be reworked.. hacked it from being
         // image-only to image, audio, or video
@@ -296,6 +312,7 @@ export default {
           let newObj = {};
           newObj.componentType = mimeUtils.getItemType(curFileData.ext);
           newObj.data = droppedItem;
+          newObj.clientId = clientId;
           newObj.data.path = droppedItem.curSrc;
 
           droppedItem.onload = () => {
@@ -309,22 +326,25 @@ export default {
         }
 
         reader.readAsDataURL(curFile);
-        this.doUpload(curFile, curFileData.ext);
+        this.doUpload(curFile, clientId, curFileData.ext);
       })
     },
 
 
-    doUpload(uploadFile, extension = "png") {
+    doUpload(uploadFile, clientId = "fake client id", extension = "png") {
       const uploadData = new FormData();
       uploadData.append('thefile', uploadFile);
       uploadData.append('title', 'media upload');
       uploadData.append('extension', extension);
       uploadData.append('description', 'media description');
       uploadData.append('container', this.curCollectionList._id);
+      uploadData.append('clientId', clientId);
 
       const config = {
         headers: { 'content-type': 'multipart/form-data' }
       }
+
+      console.dir(JSON.stringify(uploadData));
 
       axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/fileupload`, uploadData, config)
         .then(function (response) {

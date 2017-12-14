@@ -15,6 +15,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "date-fns": "^1.28.5",
+    "uuid": "^3.1.0",
     "vue": "^2.4.2",
     "vue-config": "^1.0.0",
     "vue-router": "^2.6.0",
