@@ -8,16 +8,6 @@
 
     <TTTHeader :context="this.headerTitle"></TTTHeader>
     <v-container fluid>
-      <v-layout row v-for="curItem in this.pastedList" :key="curKey++">
-        <v-flex xs8 class="mediaBox">
-          <v-card flat pb-5>
-            <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
-            </component>
-          </v-card>
-          <v-spacer></v-spacer>
-        </v-flex>
-      </v-layout>
-
       <v-layout row wrap>
         <v-flex xs12>
           <v-card v-if="this.numItems === 0">
@@ -101,8 +91,6 @@ export default {
 
       curKey: 1,
       itemList: [],
-      pastedList: [],
-      addedList: [],
 
       allTags: {},
       allTagEdits: {},
@@ -187,7 +175,7 @@ export default {
     },
 
     onPaste(event) {
-      event.preventDefault();
+      // event.preventDefault();
 
       let index = 0;
       let items = (event.clipboardData || event.originalEvent.clipboardData).items;
@@ -205,28 +193,19 @@ export default {
         let source = URLObj.createObjectURL(imageFile);
         this.numItems++;
 
-
-        // The URL can then be used as the source of an image
-        this.createImage(source);
-
         reader.onload = (event) => {
           let myImage = new Image();
           myImage.src = event.target.result;
-
           const clientId = this.newUUID();
           let newObj = {};
           newObj.componentType = mimeUtils.getItemType('.png');
-          newObj.data = source;
+          newObj.data = myImage;
           newObj.data.clientId = clientId;
-
-          // look into how to get rid of this?
+          // // look into how to get rid of this?
           newObj.id = clientId;
           newObj.data.sourceType = "local";
           newObj.tags = [];
           newObj.data.path = reader.result;
-
-
-          console.dir(newObj);
 
           this.$set(this.showEditTags, newObj.id, false);
           this.$set(this.allTagEdits, newObj.id, '');
@@ -235,12 +214,8 @@ export default {
           this.curCollectionList.renderLinks.push(newObj);
           this.doUpload(imageFile, clientId);
           
-          // myImage.onload = () => {
-          //   // this.doUpload(myImage);
-          // }
         };
         reader.readAsDataURL(imageFile);
-        // this.doUpload(imageFile, clientId);
       }
     },
 
@@ -396,15 +371,6 @@ export default {
       } else {
         this.doDroppedFiles(event);
       }
-    },
-
-    createImage: function(source) {
-      let pastedImage = new Image();
-      pastedImage.onload = function() {
-        //
-      }
-      pastedImage.src = source;
-      this.pastedList.unshift(pastedImage.src);
     },
 
 
