@@ -19,18 +19,6 @@
         </v-flex>
       </v-layout>
 
-      <v-layout row v-for="curItem in this.addedList" key="curKey++">
-        <v-flex xs12>
-          <v-card flat pb-5>
-
-            <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="curItem.componentType">
-            </component>
-            <v-spacer></v-spacer>
-
-          </v-card>
-        </v-flex>
-      </v-layout>
-
       <v-layout row wrap>
         <v-flex xs12>
           <v-card v-if="this.numItems === 0">
@@ -48,12 +36,12 @@
               <v-layout row wrap>
                 <v-flex xs7 class="mediaBox">
 
-                  <component :itemPath="getCurMedia(curItem.data)" :allData="curItem" key="curKey++" v-bind:is="curItem.componentType">
+                  <component :itemPath="getCurMedia(curItem.data)" :allData="curItem" :key="curKey++" v-bind:is="curItem.componentType">
                   </component>
 
                 </v-flex>
                 <v-flex xs4>
-                  <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
+                  <v-btn color="indigo" dark @click="toggleEdit(curItem.data.clientId)"><v-icon dark left>mode_edit</v-icon></v-btn>
                 </v-flex>
 
                 <v-form v-if="showEditTags[curItem.data.clientId]" ref="form">
@@ -160,9 +148,9 @@ export default {
 
             newObj.data = cur;
             newObj.componentType = mimeUtils.getItemType(cur.fileName)
-            console.log(newObj);
             newObj.tags = cur.tags || [];
             newObj.id = cur.clientId;
+            newObj.data.sourceType = "remote";
 
             this.$set(this.showEditTags, newObj.id, false);
             this.$set(this.allTagEdits, newObj.id, '');
@@ -257,7 +245,7 @@ export default {
                     clientId: clientId
                   }
 
-                  this.curCollectionList.links.push(newLink);
+                  this.curCollectionList.renderLinks.push(newLink);
               })
               .catch((err) => {
                   console.log(err);
@@ -273,6 +261,7 @@ export default {
           let canvas = document.createElement('canvas');
           let ctx = canvas.getContext('2d');
           const clientId = this.newUUID();
+          this.numItems++;
 
           curImage.onload = () => {
             canvas.width = curImage.width;
@@ -286,11 +275,23 @@ export default {
               })
           }
 
+        let newObj = {};
+        newObj.id = clientId;
+        newObj.tags = [];
+        newObj.data = curImage;
+
+        newObj.componentType = "image";
+        this.$set(this.showEditTags, newObj.id, false);
+        this.$set(this.allTagEdits, newObj.id, '');
+        this.$set(this.allTags, newObj.id, newObj.tags);
+
+
         curImage.setAttribute('crossOrigin', 'anonymous');
         curImage.src = src;
+        this.curCollectionList.renderLinks.push(newObj);
 
         // dont user imagelist any more...
-        this.imageList.unshift(curImage.src);
+        // this.imageList.unshift(curImage.src);
       }
     },
 
@@ -301,32 +302,39 @@ export default {
       theFiles.map(curFile => {
         // get file type
         let curFileData = mimeUtils.getData(curFile);
-        const clientId = this.newUUID();
+        this.numItems++;
+
 
         // am sure this should be reworked.. hacked it from being
         // image-only to image, audio, or video
         let reader = new FileReader();
         reader.onload = (inner) => {
-
+          
+          console.log(reader.result);
+          
           let droppedItem = this.getNewElementForType(curFileData.type);
+          const clientId = this.newUUID();
+          // console.log(curFile);
           let newObj = {};
           newObj.componentType = mimeUtils.getItemType(curFileData.ext);
-          newObj.data = droppedItem;
-          newObj.clientId = clientId;
-          newObj.data.path = droppedItem.curSrc;
+          newObj.data = curFile;
+          newObj.data.clientId = clientId;
 
-          droppedItem.onload = () => {
-            // this.showDropHelp = 0;
-          }
+          // look into how to get rid of this?
+          newObj.id = clientId;
+          newObj.data.sourceType = "local";
+          newObj.tags = [];
+          newObj.data.path = reader.result;
 
-          droppedItem.src = reader.result;
-          this.addedList.push(newObj);
+          this.$set(this.showEditTags, newObj.id, false);
+          this.$set(this.allTagEdits, newObj.id, '');
+          this.$set(this.allTags, newObj.id, newObj.tags);
 
           this.curCollectionList.renderLinks.push(newObj);
+          this.doUpload(curFile, clientId, curFileData.ext);
         }
 
         reader.readAsDataURL(curFile);
-        this.doUpload(curFile, clientId, curFileData.ext);
       })
     },
 
@@ -394,7 +402,12 @@ export default {
     },
 
     getCurMedia(item) {
-      return `${this.$config.SERVER}${this.$config.SERVER_PORT}/${item.path}`;
+      if (item.sourceType === "remote") {
+        return `${this.$config.SERVER}${this.$config.SERVER_PORT}/${item.path}`;
+      } else {
+        // dropped or pasted
+        return item.path;
+      }
     },
 
 
