@@ -1,5 +1,5 @@
 # ThereThenThat
-Alpha 2 (Breve) - December 16, 2017
+Alpha 3 (Coffee Cubano) - December 16, 2017
 
 ![ThereThenThat Logo](ThereThenThat-client/static/ttt-logo-small.png)
 
@@ -18,9 +18,9 @@ I originally wrote this idea up in 2003-2005:
 * https://web.archive.org/web/20030418025743/http://thereandthen.org:80/
 * https://web.archive.org/web/20050403204849/http://thereandthen.org:80/
 
-Release Note for Breve (yes, all of the Alpha Releases are coffee related):
+Release Note for Coffee Cubano:
 
-* support image/audio/video drop into a preview card, with tagging available
+* support image pasting from a screenshot - with tagging available during preview
 
 
 ### Features
