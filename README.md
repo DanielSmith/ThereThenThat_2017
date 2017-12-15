@@ -1,5 +1,5 @@
 # ThereThenThat
-Alpha 2 (Breve) - December 13, 2017
+Alpha 2 (Breve) - December 16, 2017
 
 ![ThereThenThat Logo](ThereThenThat-client/static/ttt-logo-small.png)
 
