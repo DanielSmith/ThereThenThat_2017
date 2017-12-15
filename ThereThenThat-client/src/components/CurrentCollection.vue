@@ -361,7 +361,7 @@ export default {
     },
 
 
-    doUpload(uploadFile, clientId = "fake client id", extension = "png") {
+    doUpload(uploadFile, clientId, extension = "png") {
       const uploadData = new FormData();
       uploadData.append('thefile', uploadFile);
       uploadData.append('title', 'media upload');

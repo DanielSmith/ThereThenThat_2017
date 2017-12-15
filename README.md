@@ -1,5 +1,5 @@
 # ThereThenThat
-Alpha 1 (Arabica Bean) - December 13, 2017
+Alpha 2 (Breve) - December 13, 2017
 
 ![ThereThenThat Logo](ThereThenThat-client/static/ttt-logo-small.png)
 
@@ -18,12 +18,16 @@ I originally wrote this idea up in 2003-2005:
 * https://web.archive.org/web/20030418025743/http://thereandthen.org:80/
 * https://web.archive.org/web/20050403204849/http://thereandthen.org:80/
 
+Release Note for Breve (yes, all of the Alpha Releases are coffee related):
+
+* support image/audio/video drop into a preview card, with tagging available
+
+
 ### Features
 
 * Search for collections by Location, Time, and/or Tags
 * Drag and Drop links to web pages...
 * Drag and Drop image, audio(mp3), and video(mp4) files into it...
-* Paste screen captures...
 * instant previews and auto-upload
 * tag individual items
 
