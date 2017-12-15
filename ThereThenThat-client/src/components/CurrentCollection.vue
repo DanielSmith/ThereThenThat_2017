@@ -7,9 +7,8 @@
     @paste.native="onPaste($event)">
 
     <TTTHeader :context="this.headerTitle"></TTTHeader>
-    <!-- <SearchAndCreate></SearchAndCreate> -->
     <v-container fluid>
-      <v-layout row v-for="curItem in this.pastedList" key="curKey++">
+      <v-layout row v-for="curItem in this.pastedList" :key="curKey++">
         <v-flex xs8 class="mediaBox">
           <v-card flat pb-5>
             <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
@@ -36,7 +35,7 @@
               <v-layout row wrap>
                 <v-flex xs7 class="mediaBox">
 
-                  <component :itemPath="getCurMedia(curItem.data)" :allData="curItem" :key="curKey++" v-bind:is="curItem.componentType">
+                  <component :itemPath="getCurMedia(curItem.data)" :allData="curItem"  v-bind:is="curItem.componentType">
                   </component>
 
                 </v-flex>
@@ -100,6 +99,7 @@ export default {
     return {
       currentView: 'videoComponent',
 
+      curKey: 1,
       itemList: [],
       pastedList: [],
       addedList: [],
@@ -187,6 +187,8 @@ export default {
     },
 
     onPaste(event) {
+      event.preventDefault();
+
       let index = 0;
       let items = (event.clipboardData || event.originalEvent.clipboardData).items;
       const clientId = this.newUUID();
@@ -201,6 +203,8 @@ export default {
 
         let URLObj = window.URL || window.webkitURL;
         let source = URLObj.createObjectURL(imageFile);
+        this.numItems++;
+
 
         // The URL can then be used as the source of an image
         this.createImage(source);
@@ -209,12 +213,34 @@ export default {
           let myImage = new Image();
           myImage.src = event.target.result;
 
-          myImage.onload = () => {
-            // this.doUpload(myImage);
-          }
+          const clientId = this.newUUID();
+          let newObj = {};
+          newObj.componentType = mimeUtils.getItemType('.png');
+          newObj.data = source;
+          newObj.data.clientId = clientId;
+
+          // look into how to get rid of this?
+          newObj.id = clientId;
+          newObj.data.sourceType = "local";
+          newObj.tags = [];
+          newObj.data.path = reader.result;
+
+
+          console.dir(newObj);
+
+          this.$set(this.showEditTags, newObj.id, false);
+          this.$set(this.allTagEdits, newObj.id, '');
+          this.$set(this.allTags, newObj.id, newObj.tags);
+
+          this.curCollectionList.renderLinks.push(newObj);
+          this.doUpload(imageFile, clientId);
+          
+          // myImage.onload = () => {
+          //   // this.doUpload(myImage);
+          // }
         };
         reader.readAsDataURL(imageFile);
-        this.doUpload(imageFile, clientId);
+        // this.doUpload(imageFile, clientId);
       }
     },
 
@@ -304,17 +330,13 @@ export default {
         let curFileData = mimeUtils.getData(curFile);
         this.numItems++;
 
-
         // am sure this should be reworked.. hacked it from being
         // image-only to image, audio, or video
         let reader = new FileReader();
         reader.onload = (inner) => {
           
-          console.log(reader.result);
-          
           let droppedItem = this.getNewElementForType(curFileData.type);
           const clientId = this.newUUID();
-          // console.log(curFile);
           let newObj = {};
           newObj.componentType = mimeUtils.getItemType(curFileData.ext);
           newObj.data = curFile;
@@ -418,7 +440,6 @@ export default {
     submitTags(id) {
       
       // rewrite this.. the empty and null cases can cause problems
-      console.log(this.allTags);
       // am also being careful not to send an empty tag
       let tAry = (this.allTagEdits[id]).split(/ +/);
       tAry = tAry.filter(val => val !== '');
