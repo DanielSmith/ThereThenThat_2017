@@ -231,13 +231,13 @@ export default {
             const container = this.curCollectionList._id;
             const address = this.curCollectionList.address;
             const clientId = this.newUUID();
-            this.numItems++;
 
             let mynow = Date.now();
 
             axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/addlink`, { 
-               link, container })
+              link, container, clientId })
               .then(response => {
+                  this.numItems++;
                   let newLink = {
                     // may need to add clientId here...
                     _id: response.data._id,
@@ -256,7 +256,6 @@ export default {
                   this.$set(this.showEditTags, newObj.id, false);
                   this.$set(this.allTagEdits, newObj.id, '');
                   this.$set(this.allTags, newObj.id, newObj.tags);
-
 
                   this.curCollectionList.renderLinks.push(newObj);
               })
@@ -361,8 +360,6 @@ export default {
         headers: { 'content-type': 'multipart/form-data' }
       }
 
-      console.dir(JSON.stringify(uploadData));
-
       axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/fileupload`, uploadData, config)
         .then(function (response) {
           console.log(response);
@@ -412,6 +409,7 @@ export default {
 
 
     toggleEdit(id) {
+      console.log('toggle for ' + id);
       this.showEditTags[id] = !this.showEditTags[id];
     },
 

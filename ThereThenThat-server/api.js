@@ -130,7 +130,8 @@ router.post("/addlink", function (req, res, next) {
   res.locals.newLinkInfo = tttUtils.getLink(req.body);
 
   const url = req.body.link;
-  const theContainer = req.body.container
+  const theContainer = req.body.container;
+  const clientId = req.body.clientId;
 
   const client = new MetaInspector(url, { timeout: 5000 });
   let description = '';
@@ -145,7 +146,8 @@ router.post("/addlink", function (req, res, next) {
     const link = new Link({
       url: url,
       title: title,
-      description: description
+      description: description,
+      clientId: clientId
     });
 
 
@@ -211,7 +213,6 @@ router.post('/gettags', function(req, res, next) {
 
 router.post('/synctags', function(req, res, next) {
   
-
   console.log(req.body);
   // needs much better error handling
   if (req.body.tagquery === undefined ||
