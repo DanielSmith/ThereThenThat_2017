@@ -31,7 +31,7 @@ Release Note for Coffee Cubano:
 * instant previews and auto-upload
 * tag individual items
 
-Users start a collection that expresses some “where, when, what”, and fill it with references and media that relate to that.  Think of something such as:
+Users start a collection that expresses some “where, when, what” concept, and fill it with references and media that relate to that.  Think of something such as:
 
 _"New York City, November 2017, CentralPark, Parade"_
 

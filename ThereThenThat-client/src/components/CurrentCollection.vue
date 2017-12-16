@@ -231,6 +231,7 @@ export default {
             const container = this.curCollectionList._id;
             const address = this.curCollectionList.address;
             const clientId = this.newUUID();
+            this.numItems++;
 
             let mynow = Date.now();
 
@@ -246,7 +247,18 @@ export default {
                     clientId: clientId
                   }
 
-                  this.curCollectionList.renderLinks.push(newLink);
+                  let newObj = {};
+                  newObj.id = clientId;
+                  newObj.tags = [];
+                  newObj.componentType = "textComponent";
+                  newObj.data = newLink;
+
+                  this.$set(this.showEditTags, newObj.id, false);
+                  this.$set(this.allTagEdits, newObj.id, '');
+                  this.$set(this.allTags, newObj.id, newObj.tags);
+
+
+                  this.curCollectionList.renderLinks.push(newObj);
               })
               .catch((err) => {
                   console.log(err);
