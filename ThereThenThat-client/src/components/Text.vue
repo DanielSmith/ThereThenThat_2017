@@ -1,7 +1,5 @@
 <template>
   <div>
-
-
   <p>
     {{ allData.data.title }}
   </p>

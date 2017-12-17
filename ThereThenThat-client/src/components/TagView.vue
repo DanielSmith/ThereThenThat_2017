@@ -10,28 +10,6 @@
 
     <SearchAndCreate></SearchAndCreate>
     <v-container fluid>
-      <v-layout row v-for="curItem in this.pastedList" key="curKey++">
-        <v-flex xs8 class="mediaBox">
-          <v-card flat pb-5>
-            <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="imageComponent">
-            </component>
-          </v-card>
-          <v-spacer></v-spacer>
-        </v-flex>
-      </v-layout>
-
-      <v-layout row v-for="curItem in this.addedList" key="curKey++">
-        <v-flex xs12>
-          <v-card flat pb-5>
-
-            <component :itemPath="curItem.data.src" key="curKey++" v-bind:is="curItem.componentType">
-            </component>
-            <v-spacer></v-spacer>
-
-          </v-card>
-        </v-flex>
-      </v-layout>
-
 
       <v-layout row wrap>
         <v-flex xs12>
@@ -42,7 +20,6 @@
 
                   <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
                   </component>
-
 
                   <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
                 </v-flex>
@@ -91,9 +68,12 @@ import videoComponent from './Video';
 import imageComponent from './Image';
 import textComponent from './Text';
 import mimeUtils from '../../../common/mimeUtils';
+import { CollectionMixin }  from '../mixins/CollectionMixin';
+
 
 export default {
   name: 'TagView',
+  mixins: [CollectionMixin],
 
   components: {
     TTTHeader,
@@ -178,26 +158,6 @@ export default {
         });
     },
 
-    getNewElementForType(theType) {
-
-      switch (theType) {
-        case "image":
-          return new Image();
-          break;
-
-        case "audio":
-          return new Audio();
-          break;
-
-        case "video":
-          return document.createElement('video');
-          break;
-
-        default:
-          return ''; // what to use for this...?
-          break;
-      }
-    },
 
     onPaste(event) {
       let index = 0;
@@ -355,27 +315,6 @@ export default {
       this.pastedList.unshift(pastedImage.src);
     },
 
-
-    // specific drag / drop / paste handlers for
-    // Collection list - these would put items on
-    // a shalf for use with a specific collection
-    dragEnd: function(args) {
-      args.preventDefault();
-    },
-
-    dragOver: function(args) {
-      args.preventDefault();
-    },
-
-    checkCuritem(item) {
-      return item.entryType === "image";
-    },
-
-    getCurMedia(item) {
-      return `${this.$config.SERVER}${this.$config.SERVER_PORT}/${item.path}`;
-    },
-
-
     toggleEdit(id) {
       this.showEditTags[id] = !this.showEditTags[id];
     },
@@ -399,24 +338,6 @@ export default {
       this.allTagEdits[id] = '';
       this.syncTags(id);
     },
-
-    chooseTag(id, tag) {
-
-      // are we editing, or doing a search?
-      if (this.showEditTags[id]) {
-        const newTags = this.allTags[id].filter(val => val !== tag);
-        this.$set(this.allTags, id, newTags);
-        this.syncTags(id);
-      } else {
-        tag = tag.trim();
-
-        // this.getTagView(tag);
-        // need to get the router working.. 
-        this.$router.push({ name: 'TagView', params: { tags: tag  }});
-      }
-    },
-
-
 
     syncTags(id) {
 

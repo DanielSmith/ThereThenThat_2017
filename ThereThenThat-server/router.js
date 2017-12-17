@@ -107,6 +107,7 @@ app.get('*', function(req, res, next) {
     if (err) { return next(err); }
 
     if (existingAddress) {
+
       return res.status(200).json(existingAddress);
     } else {
       res.send(req.params);

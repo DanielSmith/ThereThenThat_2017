@@ -22,20 +22,20 @@
           </v-card>
           <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data.clientId">
             <v-container fluid grid-list-lg>
-              <v-layout row wrap>
+              <v-layout row>
                 <v-flex xs7 class="mediaBox">
 
                   <component :itemPath="getCurMedia(curItem.data)" :allData="curItem"  v-bind:is="curItem.componentType">
                   </component>
 
                 </v-flex>
-                <v-flex xs4>
+                <v-flex xs5>
                   <v-btn color="indigo" dark @click="toggleEdit(curItem.data.clientId)"><v-icon dark left>mode_edit</v-icon></v-btn>
-                </v-flex>
+                <!-- </v-flex> -->
 
                 <v-form v-if="showEditTags[curItem.data.clientId]" ref="form">
-                  <v-layout pl-5 row>
-                    <v-flex xs4>
+                  <v-layout pl-5 row wrap>
+                    <v-flex xs5>
                       <v-text-field
                       label="Enter new tags"
                       v-model="allTagEdits[curItem.data.clientId]"
@@ -49,9 +49,10 @@
                 <v-btn  v-for="curTag in allTags[curItem.data.clientId]" key="curKey++"
                   @click="chooseTag(curItem.data.clientId, curTag)"
                   >
+                  <span class="showEditTag" v-if="showEditTags[curItem.data.clientId]">X </span>
                   <strong> {{ curTag }} </strong> 
-                  <span class="showEditTag" v-if="showEditTags[curItem.data.clientId]"> X  </span>
                 </v-btn>
+                </v-flex>
               </v-layout>
             </v-container>
           </v-card>
@@ -65,16 +66,17 @@
 import TTTHeader from '@/components/TTTHeader';
 import SearchAndCreate from '@/components/SearchAndCreate';
 import axios from 'axios';
-import uuidv4 from 'uuid/v4';
 
 import audioComponent from './Audio';
 import videoComponent from './Video';
 import imageComponent from './Image';
 import textComponent from './Text';
 import mimeUtils from '../../../common/mimeUtils';
+import { CollectionMixin }  from '../mixins/CollectionMixin';
 
 export default {
   name: 'CurrentCollection',
+  mixins: [CollectionMixin],
 
   components: {
     TTTHeader,
@@ -108,15 +110,7 @@ export default {
     this.getSingleCollection();
   },
 
-
   methods: {
-
-    newUUID() {
-      const curUUID = uuidv4();
-      // console.log(curUUID);
-
-      return curUUID;
-    },
 
     // call server for JSON data
     getSingleCollection() {
@@ -149,29 +143,6 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    },
-
-    getNewElementForType(theType) {
-
-      switch (theType) {
-        case "image":
-          return new Image();
-          break;
-
-        case "audio":
-          return new Audio();
-          break;
-
-        case "video":
-          return document.createElement('video');
-          break;
-
-        // do something for text too?
-
-        default:
-          return ''; // what to use for this...?
-          break;
-      }
     },
 
     onPaste(event) {
@@ -383,30 +354,6 @@ export default {
     },
 
 
-    // specific drag / drop / paste handlers for
-    // Collection list - these would put items on
-    // a shalf for use with a specific collection
-    dragEnd: function(args) {
-      args.preventDefault();
-    },
-
-    dragOver: function(args) {
-      args.preventDefault();
-    },
-
-    checkCuritem(item) {
-      return item.entryType === "image";
-    },
-
-    getCurMedia(item) {
-      if (item.sourceType === "remote") {
-        return `${this.$config.SERVER}${this.$config.SERVER_PORT}/${item.path}`;
-      } else {
-        // dropped or pasted
-        return item.path;
-      }
-    },
-
 
     toggleEdit(id) {
       console.log('toggle for ' + id);
@@ -433,18 +380,7 @@ export default {
       this.syncTags(id);
     },
 
-    chooseTag(id, tag) {
-      // are we editing, or doing a search?
-      if (this.showEditTags[id]) {
-        const newTags = this.allTags[id].filter(val => val !== tag);
-        this.$set(this.allTags, id, newTags);
-        this.syncTags(id);
-      } else {
-        tag = tag.trim();
-        // this pushes over to TagView
-        this.$router.push({ name: 'TagView', params: { tags: tag }})
-      }
-    },
+
 
 
     syncTags(id) {
@@ -473,6 +409,12 @@ export default {
 
 img, audio, video {
   max-width: 60%;
+}
+
+.showEditTag {
+  color: red;
+  width: 50px;
+  text-align: left;
 }
 
 .mediaBox {
