@@ -20,35 +20,41 @@ export default new Router({
 
   {
     path: '/api/gettags/:tags',
+    name: 'TagView',
     component: TagView,
-    name: 'TagView'
+    props: (route) => ({ mode: 'byTags' })    
   },
 
   // handle TTT Addresses
   {
     path: '/:location/:time/:tags/:people/:options',
     name: 'SingleLTTPO',
-    component: CurrentCollection
+    component: CurrentCollection,
+    props: (route) => ({ mode: 'byCollection' })
   },
   {
     path: '/:location/:time/:tags/:people',
     name: 'SingleLTTP',
-    component: CurrentCollection
+    component: CurrentCollection,
+    props: (route) => ({ mode: 'byCollection' })
   },
   {
     path: '/:location/:time/:tags',
     name: 'SingleLTT',
-    component: CurrentCollection
+    component: CurrentCollection,
+    props: (route) => ({ mode: 'byCollection' })
   },
   {
     path: '/:location/:time',
     name: 'SingleLT',
-    component: CurrentCollection
+    component: CurrentCollection,
+    props: (route) => ({ mode: 'byCollection' })
   },
   {
     path: '/:location',
     name: 'SingleL',
-    component: CurrentCollection
+    component: CurrentCollection,
+    props: (route) => ({ mode: 'byCollection' })
   }
   ],
 });

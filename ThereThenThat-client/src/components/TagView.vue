@@ -18,7 +18,7 @@
               <v-layout row wrap>
                 <v-flex xs7 class="mediaBox">
 
-                  <component :itemPath="getCurMedia(curItem.data)" key="curKey++" v-bind:is="curItem.componentType">
+                  <component :itemPath="getCurMedia(curItem.data)" :allData="curItem"  key="curKey++" v-bind:is="curItem.componentType">
                   </component>
 
                   <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
@@ -42,11 +42,11 @@
                     </v-flex>
                   </v-layout>
                 </v-form>
-                <v-btn  v-for="curTag in allTags[curItem.data._id]" key="curKey++"
-                  @click="chooseTag(curItem.data._id, curTag)"
+                <v-btn  v-for="curTag in allTags[curItem.data.clientId]" key="curKey++"
+                  @click="chooseTag(curItem.data.clientId, curTag)"
                   >
                   <strong> {{ curTag }} </strong> 
-                  <span class="showEditTag" v-if="showEditTags[curItem.data._id]"> X  </span>
+                  <span class="showEditTag" v-if="showEditTags[curItem.data.clientId]"> X  </span>
                 </v-btn>
 
               </v-layout>
@@ -86,19 +86,14 @@ export default {
   
   data() {
     return {
-
       currentView: 'videoComponent',
 
-      itemList: [],
-      pastedList: [],
-      addedList: [],
+      curKey: 1,
 
-      allTags: {},
-      allTagEdits: {},
-      showEditTags: {},
+      numItems: 0,
 
-      curCollectionList: [],
-      imageList: []
+      headerTitle: 'fetching collection...'
+
     }
   },
 
@@ -137,14 +132,14 @@ export default {
           this.curCollectionList.renderLinks = [];
           this.curCollectionList.links.map(cur => {
             let newObj = {};
+            this.numItems++;
 
             newObj.data = cur;
-            console.log('cur is... ');
             newObj.componentType = mimeUtils.getItemType(cur.fileName)
             console.log(newObj);
             newObj.tags = cur.tags || [];
-            newObj.id = cur._id;
-
+            newObj.id = cur.clientId;
+            newObj.data.sourceType = "remote";
 
             this.$set(this.showEditTags, newObj.id, false);
             this.$set(this.allTagEdits, newObj.id, '');
@@ -306,6 +301,8 @@ export default {
       this.doDroppedFiles(event);
     },
 
+
+    // get this from mixin...
     createImage: function(source) {
       let pastedImage = new Image();
       pastedImage.onload = function() {
@@ -338,6 +335,24 @@ export default {
       this.allTagEdits[id] = '';
       this.syncTags(id);
     },
+
+    chooseTag(id, tag) {
+
+      // are we editing, or doing a search?
+      if (this.showEditTags[id]) {
+        const newTags = this.allTags[id].filter(val => val !== tag);
+        this.$set(this.allTags, id, newTags);
+        this.syncTags(id);
+      } else {
+        tag = tag.trim();
+
+        // this.getTagView(tag);
+        // need to get the router working.. 
+        this.$router.push({ name: 'TagView', params: { tags: tag  }});
+      }
+    },
+
+
 
     syncTags(id) {
 
