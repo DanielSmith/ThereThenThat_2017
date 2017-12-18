@@ -1,5 +1,5 @@
 # ThereThenThat
-Alpha 3 (Coffee Cubano) - December 16, 2017
+Alpha 4 (Doppio) - December 18, 2017
 
 ![ThereThenThat Logo](ThereThenThat-client/static/ttt-logo-small.png)
 
@@ -18,9 +18,15 @@ I originally wrote this idea up in 2003-2005:
 * https://web.archive.org/web/20030418025743/http://thereandthen.org:80/
 * https://web.archive.org/web/20050403204849/http://thereandthen.org:80/
 
-Release Note for Coffee Cubano:
+Release Note for Alpha 4 (Doppio):
 
-* support image pasting from a screenshot - with tagging available during preview
+* migrating to a mixin
+* better support for drag/drop of links to other pages
+
+Tag View is not stable.  There is no collection to paste or drag to in that mode.  The idea will be to create a "collection by the day" to handle all new media.  The goal is:
+
+* when looking at a collection, new media/links will go to that collection + a collection for that day
+* when looking at tag view, new media/links will go to a collection for that day
 
 
 ### Features
