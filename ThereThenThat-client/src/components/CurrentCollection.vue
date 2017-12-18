@@ -90,11 +90,6 @@ export default {
   data() {
     return {
       currentView: 'videoComponent',
-
-      curKey: 1,
-
-      numItems: 0,
-
       headerTitle: 'fetching collection...'
     }
   },
@@ -103,13 +98,6 @@ export default {
     if (this.mode === 'byCollection') {
       this.getSingleCollection();
     }
-  },
-
-
-  beforeRouteUpdate(to, from, next) {
-    // I am thinking this is not the correct way to do this...?
-    this.getTagView(to.params.tags);
-    next();
   },
 
 

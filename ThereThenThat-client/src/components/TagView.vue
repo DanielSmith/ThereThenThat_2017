@@ -1,4 +1,8 @@
 <template>
+  <!--
+     yes, this tmeplate is a repeat of the one in CurentCollection
+    the aim is to consolidate ...
+   -->
   <v-app light
     @dragover.native="dragOver"
     @drop.native="doDrop"
@@ -6,54 +10,56 @@
     @dragend.native="dragEnd"
     @paste.native="onPaste($event)">
 
-    <TTTHeader></TTTHeader>
-
-    <SearchAndCreate></SearchAndCreate>
+    <TTTHeader :context="this.headerTitle"></TTTHeader>
     <v-container fluid>
-
       <v-layout row wrap>
         <v-flex xs12>
-          <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data._id">
+          <v-card v-if="this.numItems === 0">
             <v-container fluid grid-list-lg>
               <v-layout row wrap>
+                <v-flex xs7>
+                    <p>Drag media items here...</p>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card>
+          <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data.clientId">
+            <v-container fluid grid-list-lg>
+              <v-layout row class="curRow">
                 <v-flex xs7 class="mediaBox">
 
-                  <component :itemPath="getCurMedia(curItem.data)" :allData="curItem"  key="curKey++" v-bind:is="curItem.componentType">
+                  <component :itemPath="getCurMedia(curItem.data)" :allData="curItem"  v-bind:is="curItem.componentType">
                   </component>
 
-                  <!-- <v-btn @click="syncTags(curItem.data._id)">sync</v-btn> -->
                 </v-flex>
-                <v-flex xs4>
-                  <!-- <h4>{{ curItem.data.originalname }} - <br>  <a :href=curItem.data.url target="fromTTT"> {{ curItem.data.url }}</a> </h4> -->
+                <v-flex xs5 class="itemSection">
+                  <v-btn color="indigo" dark @click="toggleEdit(curItem.data.clientId)"><v-icon dark left>mode_edit</v-icon></v-btn>
 
-                  <v-btn color="indigo" dark @click="toggleEdit(curItem.id)"><v-icon dark left>mode_edit</v-icon></v-btn>
+                  <v-form v-if="showEditTags[curItem.data.clientId]" ref="form">
+                    <v-layout pl-5 row wrap>
+                      <v-flex xs5>
+                        <v-text-field
+                        label="Enter new tags"
+                        v-model="allTagEdits[curItem.data.clientId]"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs4>
+                        <v-btn @click="submitTags(curItem.data.clientId)">Add Tags</v-btn>
+                      </v-flex>
+                    </v-layout>
+                  </v-form>
+                  <v-btn  v-for="curTag in allTags[curItem.data.clientId]" key="curKey++"
+                    @click="chooseTag(curItem.data.clientId, curTag)"
+                    >
+                    <span class="showEditTag" v-if="showEditTags[curItem.data.clientId]">X </span>
+                    <strong> {{ curTag }} </strong> 
+                  </v-btn>
                 </v-flex>
-
-                <v-form v-if="showEditTags[curItem.data._id]" ref="form">
-                  <v-layout pl-5 row>
-                    <v-flex xs4>
-                      <v-text-field
-                      label="Enter new tags"
-                      v-model="allTagEdits[curItem.data._id]"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs4>
-                      <v-btn @click="submitTags(curItem.data._id)">Add Tags</v-btn>
-                    </v-flex>
-                  </v-layout>
-                </v-form>
-                <v-btn  v-for="curTag in allTags[curItem.data.clientId]" key="curKey++"
-                  @click="chooseTag(curItem.data.clientId, curTag)"
-                  >
-                  <strong> {{ curTag }} </strong> 
-                  <span class="showEditTag" v-if="showEditTags[curItem.data.clientId]"> X  </span>
-                </v-btn>
-
               </v-layout>
             </v-container>
           </v-card>
         </v-flex>
-      </v-layout>        
+      </v-layout>
     </v-container>
   </v-app>
 </template>
@@ -87,13 +93,7 @@ export default {
   data() {
     return {
       currentView: 'videoComponent',
-
-      curKey: 1,
-
-      numItems: 0,
-
-      headerTitle: 'fetching collection...'
-
+      headerTitle: 'fetching tagged items...'
     }
   },
 

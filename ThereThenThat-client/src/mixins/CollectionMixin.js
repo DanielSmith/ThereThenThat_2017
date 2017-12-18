@@ -6,7 +6,8 @@ export const CollectionMixin =  {
   data() {
     return {
       curCollectionList: [],
-
+      curKey: 1,    
+      numItems: 0,
       allTags: {},
       allTagEdits: {},
       showEditTags: {}
