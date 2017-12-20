@@ -7,6 +7,18 @@ const Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
 
+const byDaySchema = new Schema({
+  id: String,
+  
+  timestamp: String,
+  timeSaved: { type: Date, default: Date.now },
+
+  // this gets populated from the Link collection
+  links: [
+    {type: Schema.Types.ObjectId, ref: 'Link' }
+  ]
+});
+
 // define model
 const containerSchema = new Schema({
   id: String,
@@ -88,6 +100,7 @@ const linkSchema = new Schema({
   description: String,
   extension: String,
 
+  // TL;DR - a handle to treat known and yet to be uploaded things the same...
   // we generate an ID on the client side, as soon as an item
   // is pasted or dropped.. that gives us a way to handle
   // tagging before we actually know the ObjectId of this link
@@ -122,15 +135,18 @@ containerSchema.index({ 'gps': '2dsphere' });
 const Container = mongoose.model('Container', containerSchema);
 const Link = mongoose.model('Link', linkSchema);
 const GeoCode = mongoose.model('GeoCode', geoCodingShema);
+const DayContainer = mongoose.model('DayContainer', byDaySchema);
 
 
 // export model
 module.exports = {
+  byDaySchema,
   containerSchema,
   linkSchema,
   Container,
   Link,
-  GeoCode
+  GeoCode,
+  DayContainer
 };
 
 
