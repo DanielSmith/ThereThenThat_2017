@@ -9,7 +9,7 @@ const tttconfig = require("./config.json");
 const tttUtils = require("./tttUtils.js");
 const util = require('util');
 const MetaInspector = require('node-metainspector-with-headers');
-const { Container, Link, GeoCode } = require('./models/ttt');
+const { Container, Link, GeoCode, DayContainer } = require('./models/ttt');
 const router = express.Router();
 
 // file upload handling
@@ -39,6 +39,11 @@ api.use(bodyParser.urlencoded({extended: false}));
 api.use(bodyParser.json());
 
 module.exports = router;
+
+function addByDate() {
+
+  console.log('called addByDate');
+}
 
 // create a collection
 // TBD: allow for just one main component (location, time, or tags)
@@ -136,6 +141,7 @@ router.post("/addlink", function (req, res, next) {
   const client = new MetaInspector(url, { timeout: 5000 });
   let description = '';
   let title = '';
+  const myTodayDir = tttUtils.todayDir();
 
   client.on("fetch", function() {
     description = client.description;
@@ -150,11 +156,39 @@ router.post("/addlink", function (req, res, next) {
       clientId: clientId
     });
 
-
     link.save(function(err, theLink) {
-
+      
       if (err) { return next(err); }
+      
+      // always do by day...
+      DayContainer.findOneAndUpdate(
+        { theDay: myTodayDir },
+          { $set: {
+            theDay: myTodayDir
+          }},
+          { upsert: true },
+          function(err, result) {
+            if (err) {
+              console.log('    DayContainer.findOneAndUpdate   .......');
+              console.log(err);
+              next();
+            }
+            
+            console.log('    DayContainer.findOneAndUpdate   success... .......');
+            console.log(result);
+          }
+        );
 
+
+      // Model.findOneAndUpdate(query, { name: 'jason bourne' }, options, callback)
+      
+      // // is sent as
+      // Model.findOneAndUpdate(query, { $set: { name: 'jason bourne' }}, options, callback)
+
+
+      // Contact.update({phone:request.phone}, {$set: { phone: request.phone }}, {upsert: true}, function(err){...})
+
+      // if we have a valid container...
       Container.update(
         { "_id": theContainer }, {
           $addToSet: { "links": theLink._id }
@@ -189,6 +223,8 @@ router.post("/addlink", function (req, res, next) {
 
 router.post('/gettags', function(req, res, next) {
   
+
+  addByDate();
   console.dir(req.body.tagquery);
 
   let returnObj = {};
@@ -247,6 +283,8 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
   const description = req.body.description;
   const extension = req.body.extension;
   const clientId = req.body.clientId;
+  const myTodayDir = tttUtils.todayDir();
+  
   
   const pathToUse = req.file.path.replace('public', '') || 'none';
   console.log(req.file);
@@ -272,6 +310,32 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
 
     if (err) { return next(err); }
 
+    console.log(` id is   ${theLink._id}`);
+
+    // always do by day...
+    DayContainer.update(
+      { theDay: myTodayDir }, {
+        $addToSet: { "links": theLink._id }
+      },
+      { upsert: true },
+      function(err, result) {
+        if (err) {
+          console.log('    DayContainer.findOneAndUpdate   .......');
+          console.log(err);
+          next();
+        }
+        
+        console.log('    DayContainer.findOneAndUpdate   success... .......');
+        console.log(result);
+      }
+    );
+    
+    // { $set: {
+    //   theDay: myTodayDir,
+    //   'links': { '$push': theLink._id }
+    //   }
+    // },
+    
     Container.update(
       { "_id": theContainer }, {
         $addToSet: { "links": theLink._id }

@@ -10,6 +10,7 @@ mongoose.Promise = global.Promise;
 const byDaySchema = new Schema({
   id: String,
   
+  theDay: String,
   timestamp: String,
   timeSaved: { type: Date, default: Date.now },
 
