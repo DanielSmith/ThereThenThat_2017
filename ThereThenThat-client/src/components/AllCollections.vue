@@ -10,16 +10,44 @@
     <v-content>
       <SearchAndCreate></SearchAndCreate>
 
-      <v-container fluid>
-        <v-layout row wrap>
-          <v-flex xs12>
+      <v-tabs light fixed>
+        <v-tabs-bar light>
+          <v-tabs-item
+            key="NamedCollections"
+            href="#NamedCollections"
+            ripple>
+            Collections
+          </v-tabs-item>
+          <v-tabs-item
+            key="ItemsByDay"
+            href="#ItemsByDay"
+            ripple>
+            Items By Day
+          </v-tabs-item>
+          <v-tabs-slider color="yellow"></v-tabs-slider>
+        </v-tabs-bar>
+        <v-tabs-items>
+          <v-tabs-content
+            key="NamedCollections"
+            id="NamedCollections"
+          >
             <v-card flat pb-5 v-for="item in mainList" :key="item._id">
               <h4><a :href="item.fullURL">{{ item.title }}</a></h4>
               <p>{{ item.description }}</p>
             </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+          </v-tabs-content>
+
+          <v-tabs-content
+            key="ItemsByDay"
+            id="ItemsByDay"
+          >
+            <v-card flat pb-5 v-for="item in dayList" :key="item._id">
+              <!-- <h4><a :href="item.fullURL">{{ item.title }}</a></h4> -->
+              <h4>{{ item.theDay }}</h4>
+            </v-card>
+          </v-tabs-content>
+        </v-tabs-items>
+      </v-tabs>
 
   </v-content>
   </v-app>
@@ -65,7 +93,14 @@ export default {
 
   data() {
     return {
-      mainList: []
+      tabs: ['tab-1', 'tab-2', 'tab-3'],
+      mainList: [],
+
+      dayList: [
+        { theDay: "12-25=2017" },
+        { theDay: "12-15=2017" },
+        { theDay: "12-5=2017" }
+      ]
     }
   },
 

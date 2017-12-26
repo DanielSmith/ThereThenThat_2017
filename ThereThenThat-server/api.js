@@ -138,7 +138,7 @@ router.post("/addlink", function (req, res, next) {
   const theContainer = req.body.container;
   const clientId = req.body.clientId;
 
-  const client = new MetaInspector(url, { timeout: 5000 });
+  const client = new MetaInspector(url, { timeout: 7500 });
   let description = '';
   let title = '';
   const myTodayDir = tttUtils.todayDir();
@@ -169,24 +169,10 @@ router.post("/addlink", function (req, res, next) {
           { upsert: true },
           function(err, result) {
             if (err) {
-              console.log('    DayContainer.findOneAndUpdate   .......');
-              console.log(err);
               next();
             }
-            
-            console.log('    DayContainer.findOneAndUpdate   success... .......');
-            console.log(result);
           }
         );
-
-
-      // Model.findOneAndUpdate(query, { name: 'jason bourne' }, options, callback)
-      
-      // // is sent as
-      // Model.findOneAndUpdate(query, { $set: { name: 'jason bourne' }}, options, callback)
-
-
-      // Contact.update({phone:request.phone}, {$set: { phone: request.phone }}, {upsert: true}, function(err){...})
 
       // if we have a valid container...
       Container.update(
@@ -247,6 +233,28 @@ router.post('/gettags', function(req, res, next) {
   })
 })
 
+
+router.post('/getByDay', function(req, res, next) {
+  
+  let returnObj = {};
+  
+  DayContainer.find({})
+      .exec(function(err, existingAddress) {
+
+        if (err) {
+          console.log(err);
+          return next(err);
+        }
+        
+        console.log(existingAddress);
+        if (existingAddress) {
+          return res.status(200).json(existingAddress);
+        } else {
+          res.send(existingAddress);
+        }
+    });  
+})
+
 router.post('/synctags', function(req, res, next) {
   
   console.log(req.body);
@@ -283,7 +291,8 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
   const description = req.body.description;
   const extension = req.body.extension;
   const clientId = req.body.clientId;
-  const myTodayDir = tttUtils.todayDir();
+  // const myTodayDir = tttUtils.todayDir();
+  const myTodayDir = "2017-02-09";
   
   
   const pathToUse = req.file.path.replace('public', '') || 'none';
