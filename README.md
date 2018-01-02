@@ -12,6 +12,7 @@ ThereThenThat is like a scrapbook for media and links.
 ThereThenThat enables searching through time, space, and/or keyword.  Collections can be easily shared in a consistently formatted link.
 
 It has elements of Imgur, or Flickr, or a Blog...
+Check out: https://medium.com/@javajoint/therethenthat-mapping-web-addresses-to-location-time-and-tags-december-20-2017-copyright-2003-6df810a0e49a
 
 Historical Note:
 I originally wrote this idea up in 2003-2005:
