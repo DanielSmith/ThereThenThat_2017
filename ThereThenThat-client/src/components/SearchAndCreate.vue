@@ -157,7 +157,7 @@ export default {
 
     latLngFromMap() {
       this.lat = this.latLngUpdated.lat;
-      this.lng = this.lngLngUpdated.lat;  
+      this.lng = this.lngLngUpdated.lng;  
     },
     
     latLngUpdated() {
@@ -315,10 +315,6 @@ export default {
       google.maps.event.addListener(autocomplete, 'place_changed', () => {
         const place = autocomplete.getPlace();
 
-
-        console.log('place changed event...');
-        console.dir(place);
-
         if (place === null) {
           return;
         }
@@ -326,6 +322,10 @@ export default {
         if (place.geometry.location.lat && place.geometry.location.lng) {
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
+          this.$store.commit('mapUpdate', {
+              lat: this.lat,
+              lng: this.lng
+          });
         }
 
         this.theLocation = place.formatted_address;
@@ -373,10 +373,11 @@ export default {
     },
 
     searchClick() {
-
-      const config = { headers: { 'Content-Type': 'application/json' } };
+     const config = { headers: { 'Content-Type': 'application/json' } };
       axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/search`, { 
         location: this.theLocation,
+        lat: this.lat,
+        lng: this.lng,
         time: this.theDateTime,
         tags: this.theTags
       }, config)

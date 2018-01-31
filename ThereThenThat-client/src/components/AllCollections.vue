@@ -58,6 +58,7 @@ import Vue from 'vue'
 import TTTHeader from '@/components/TTTHeader'
 import SearchAndCreate from '@/components/SearchAndCreate'
 import { mapMutations, mapActions, mapGetters, mapState } from 'vuex';
+import axios from 'axios';
 
 export default {
   name: 'AllCollections',
@@ -95,6 +96,7 @@ export default {
     return {
       tabs: ['tab-1', 'tab-2', 'tab-3'],
       mainList: [],
+      // dayList: [],
 
       dayList: [
         { theDay: "12-25=2017" },
@@ -106,6 +108,9 @@ export default {
 
   mounted: function() {
     this.getTTTList();
+    // this.getDays();
+
+
   },
 
   methods: {
@@ -115,11 +120,25 @@ export default {
       // an individual collection
     },
 
+    getDays() {
+      this.dayList = [];
+
+      // // deliberately doing a POST, because we may want to narrow this to data ranges later
+      axios.post(`${this.$config.SERVER}${this.$config.SERVER_PORT}/api/getDays`, {}, config)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+
     getTTTList() {
       // call server for JSON data
+      const theAddress = `${this.$config.SERVER}${this.$config.SERVER_PORT}`;
 
       this.mainList = [];
-      fetch(`${this.$config.SERVER}${this.$config.SERVER_PORT}`)
+      fetch(theAddress)
         .then(response => response.json())
         .then(response => {
           response.map(cur => {

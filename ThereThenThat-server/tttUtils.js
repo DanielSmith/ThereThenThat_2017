@@ -439,7 +439,7 @@ function createLocationSearch(coordinateStr) {
         "type": "Point",
         "coordinates": [ longitudeFloat, latitudeFloat ]                                
       },
-      "$maxDistance": 20000
+      "$maxDistance": 2000
     }
   };
  

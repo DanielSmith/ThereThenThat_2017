@@ -14,6 +14,7 @@
             <v-container fluid grid-list-lg>
               <v-layout row wrap>
                 <v-flex xs7>
+
                     <p>Drag media items here...</p>
                 </v-flex>
               </v-layout>
@@ -21,35 +22,36 @@
           </v-card>
           <v-card v-for="curItem in this.curCollectionList.renderLinks" :key="curItem.data.clientId">
             <v-container fluid grid-list-lg>
-              <v-layout row class="curRow">
+              <v-layout row>
                 <v-flex xs7 class="mediaBox">
 
                   <component :itemPath="getCurMedia(curItem.data)" :allData="curItem"  v-bind:is="curItem.componentType">
                   </component>
 
                 </v-flex>
-                <v-flex xs5 class="itemSection">
+                <v-flex xs5>
                   <v-btn color="indigo" dark @click="toggleEdit(curItem.data.clientId)"><v-icon dark left>mode_edit</v-icon></v-btn>
+                <!-- </v-flex> -->
 
-                  <v-form v-if="showEditTags[curItem.data.clientId]" ref="form">
-                    <v-layout pl-5 row wrap>
-                      <v-flex xs5>
-                        <v-text-field
-                        label="Enter new tags"
-                        v-model="allTagEdits[curItem.data.clientId]"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs4>
-                        <v-btn @click="submitTags(curItem.data.clientId)">Add Tags</v-btn>
-                      </v-flex>
-                    </v-layout>
-                  </v-form>
-                  <v-btn  v-for="curTag in allTags[curItem.data.clientId]" key="curKey++"
-                    @click="chooseTag(curItem.data.clientId, curTag)"
-                    >
-                    <span class="showEditTag" v-if="showEditTags[curItem.data.clientId]">X </span>
-                    <strong> {{ curTag }} </strong> 
-                  </v-btn>
+                <v-form v-if="showEditTags[curItem.data.clientId]" ref="form">
+                  <v-layout pl-5 row wrap>
+                    <v-flex xs5>
+                      <v-text-field
+                      label="Enter new tags"
+                      v-model="allTagEdits[curItem.data.clientId]"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs4>
+                      <v-btn @click="submitTags(curItem.data.clientId)">Add Tags</v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-form>
+                <v-btn  v-for="curTag in allTags[curItem.data.clientId]" key="curKey++"
+                  @click="chooseTag(curItem.data.clientId, curTag)"
+                  >
+                  <span class="showEditTag" v-if="showEditTags[curItem.data.clientId]">X </span>
+                  <strong> {{ curTag }} </strong> 
+                </v-btn>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -76,8 +78,6 @@ export default {
   name: 'CurrentCollection',
   mixins: [CollectionMixin],
 
-  props: ['mode'],
-
   components: {
     TTTHeader,
     SearchAndCreate,
@@ -90,18 +90,59 @@ export default {
   data() {
     return {
       currentView: 'videoComponent',
+
+      curKey: 1,
+      itemList: [],
+
+      allTags: {},
+      allTagEdits: {},
+      showEditTags: {},
+
+      imageList: [],
+      numItems: 0,
+
       headerTitle: 'fetching collection...'
     }
   },
 
   mounted: function() { 
-    if (this.mode === 'byCollection') {
-      this.getSingleCollection();
-    }
+    this.getSingleCollection();
   },
 
-
   methods: {
+
+    // call server for JSON data
+    getSingleCollection() {
+      const path = `${this.$config.SERVER}${this.$config.SERVER_PORT}${this.$route.path}`;
+      this.numItems = 0;
+
+      fetch(path)
+        .then(response => response.json())
+        .then(response => {
+
+          this.headerTitle = response.title;
+          this.curCollectionList = response;
+          this.curCollectionList.renderLinks = [];
+          this.curCollectionList.links.map(cur => {
+            let newObj = {};
+            this.numItems++;
+
+            newObj.data = cur;
+            newObj.componentType = mimeUtils.getItemType(cur.fileName)
+            newObj.tags = cur.tags || [];
+            newObj.id = cur.clientId;
+            newObj.data.sourceType = "remote";
+
+            this.$set(this.showEditTags, newObj.id, false);
+            this.$set(this.allTagEdits, newObj.id, '');
+            this.$set(this.allTags, newObj.id, newObj.tags);
+            this.curCollectionList.renderLinks.push(newObj);
+          });
+        })        
+        .catch(err => {
+          console.log(err);
+        });
+    },
 
     onPaste(event) {
       // event.preventDefault();
@@ -308,6 +349,7 @@ export default {
     },
 
 
+
     toggleEdit(id) {
       console.log('toggle for ' + id);
       this.showEditTags[id] = !this.showEditTags[id];
@@ -333,7 +375,11 @@ export default {
       this.syncTags(id);
     },
 
+
+
+
     syncTags(id) {
+
       const tags = this.allTags[id];
 
       let apiPath = `${this.$config.SERVER}${this.$config.SERVER_PORT}/api/synctags`,              

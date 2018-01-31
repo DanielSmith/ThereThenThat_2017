@@ -209,7 +209,6 @@ router.post("/addlink", function (req, res, next) {
 
 router.post('/gettags', function(req, res, next) {
   
-
   addByDate();
   console.dir(req.body.tagquery);
 
@@ -234,24 +233,23 @@ router.post('/gettags', function(req, res, next) {
 })
 
 
-router.post('/getByDay', function(req, res, next) {
+router.post('/getDays', function(req, res, next) {
   
   let returnObj = {};
   
   DayContainer.find({})
-      .exec(function(err, existingAddress) {
-
-        if (err) {
-          console.log(err);
-          return next(err);
-        }
-        
-        console.log(existingAddress);
-        if (existingAddress) {
-          return res.status(200).json(existingAddress);
-        } else {
-          res.send(existingAddress);
-        }
+    .exec(function(err, aexistingAddress) {
+      if (err) {
+        console.log(err);
+        return next(err);
+      }
+      
+      console.log(existingAddress);
+      if (existingAddress) {
+        return res.status(200).json(existingAddress);
+      } else {
+        res.send(existingAddress);
+      }
     });  
 })
 
@@ -329,13 +327,8 @@ router.post('/fileupload', uploadFile, function(req, res, next) {
       { upsert: true },
       function(err, result) {
         if (err) {
-          console.log('    DayContainer.findOneAndUpdate   .......');
-          console.log(err);
           next();
         }
-        
-        console.log('    DayContainer.findOneAndUpdate   success... .......');
-        console.log(result);
       }
     );
     
@@ -376,10 +369,11 @@ router.post("/search", function (req, res, next) {
   let query = {};
   let returnObj = {};
   
-
   const title = req.body.title || '';
   const description = req.body.description || '';
   const location = req.body.location || '';
+  const lat = req.body.lat || '';
+  const lng = req.body.lng || '';
   const time = req.body.time || '';
   const tags = req.body.tags || '';
   const people = req.body.people || '';
@@ -395,9 +389,15 @@ router.post("/search", function (req, res, next) {
   }
 
   // location
-  if (location !== '') {
-    query['gps'] = tttUtils.createLocationSearch(location);
+  // if (location !== '') {
+  //   query['gps'] = tttUtils.createLocationSearch(location);
+  // }
+  
+  // search location by GPS, not address
+  if (lat !== '' && lng !== '') {
+    query['gps'] = tttUtils.createLocationSearch(`${lat},${lng}`);
   }
+
 
   // time
   // we are going to start out by just matching against the time.component...

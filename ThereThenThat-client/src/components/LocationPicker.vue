@@ -12,7 +12,6 @@ import { eventBus } from '../event-bus';
 export default {
   data() {
     return {
-
       // perhaps move this to config
       DEFAULT_ZOOM: 16,
       DEFAULT_LAT_LNG: {
@@ -59,7 +58,6 @@ export default {
         let lng = e.latLng.lng();
         let latlng = {lat: lat, lng: lng };
 
-
         this.$store.dispatch('mapUpdate', latlng);
         this.geocoder.geocode({'location': latlng}, (results, status) => {
 
@@ -83,6 +81,9 @@ export default {
 
         this.map.setZoom(this.DEFAULT_ZOOM);
       });
+
+      // force a paint from the start
+      google.maps.event.trigger(this.map, 'resize');
 
     },
 
@@ -111,7 +112,9 @@ export default {
 
     // eventBus items
     eventBus.$on('mapFocus', () => {
-      google.maps.event.trigger(this.map, 'resize');
+      setTimeout(() => {
+        google.maps.event.trigger(this.map, 'resize');
+      }, 500);
     });
   }
 }
@@ -123,7 +126,7 @@ export default {
   height: 500px;
 }
 
-@media(max-height:850px) {
+@media(max-height:550px) {
   #map {
     width: 200px;
     height: 200px;
